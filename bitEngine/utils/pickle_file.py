@@ -4,7 +4,6 @@ class BitPickleFileManager:
     def __init__(self):
         pass
 
-
     def save_processed_ngrams(self) -> None:
          pass
     
