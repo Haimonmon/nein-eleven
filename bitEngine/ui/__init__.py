@@ -1,5 +1,5 @@
-from .window import BitWindow
-from .grid import BitGrid, BitGridScoreBoard
+from .ui_window import BitWindow
+from .ui_grid import BitGrid, BitGridScoreBoard
 
 __all__ = [
     "BitWindow",
