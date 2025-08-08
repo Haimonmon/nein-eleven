@@ -1,5 +1,5 @@
-from file import BitFileManager
-from pickle_file import BitPickleFileManager
+from .file import BitFileManager
+from .pickle_file import BitPickleFileManager
 
 __all__ = [
     "BitFileManager",
