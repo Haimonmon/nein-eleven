@@ -1,12 +1,13 @@
 import pygame
-from typing import Set, Literal
+from typing import Set, Any
 
-class BitGrid:
+class BitInterfaceGrid:
     """ Renders a grid or tetris board interface """
-    def __init__(self, row: int = 20, columns: int = 30, cell_size: int = 30, display_grid: bool = False, border_color: Set[int] = (100, 100, 100), border_width: int = 1) -> None:
+    def __init__(self, grid_logic, cell_size: int = 30, display_grid: bool = False, border_color: Set[int] = (100, 100, 100), border_width: int = 1) -> None:
         """ Tetris board """
-        self.row = row
-        self.columns = columns
+        # * internal logics
+        self.grid_logic = grid_logic
+
         self.cell_size = cell_size
         self.display_grid = display_grid
 
@@ -27,15 +28,17 @@ class BitGrid:
 
         windows_width, windows_height = screen.get_size()
 
-        self.board_width: int = self.columns * self.cell_size
-        self.board_height: int = self.row * self.cell_size
+        self.board_width: int = self.grid_logic.columns * self.cell_size
+        self.board_height: int = self.grid_logic.rows * self.cell_size
 
         self.offset_x: int = (windows_width - self.board_width) // 2
         self.offset_y: int = (windows_height - self.board_height) // 2
 
+        self._get_cell_coordinates()
+        
         # * For board row
-        for row in range(self.row + 1):
-            if row in [0, self.row] and not self.display_grid:
+        for row in range(self.grid_logic.rows + 1):
+            if row in [0, self.grid_logic.rows] and not self.display_grid:
                 self.draw_vertical_line(screen, self.offset_x, self.offset_y, row, self.board_width, self.border_color, self.border_width)
             
             if self.display_grid:
@@ -43,8 +46,8 @@ class BitGrid:
 
 
         # * For board columns
-        for column in range(self.columns + 1):
-            if column in [0, self.columns] and not self.display_grid:
+        for column in range(self.grid_logic.columns + 1):
+            if column in [0, self.grid_logic.columns] and not self.display_grid:
                 self.draw_horizontal_line(screen, self.offset_x, self.offset_y, column, self.board_height, self.border_color, self.border_width)
             
             if self.display_grid:
@@ -69,12 +72,19 @@ class BitGrid:
             (offset_x + column * self.cell_size, offset_y + board_height),
             width = width
         )
+    
+
+    def _get_cell_coordinates(self) -> None: 
+        """ Gets all cell coordinates storing set of x and y coordinates """
+        for row in range(self.grid_logic.rows):
+            for column in range(self.grid_logic.columns):
+                x = self.offset_x + column * self.cell_size
+                y = self.offset_y + row * self.cell_size
+                self.cell_coordinates.append((x, y))
 
 
-   
-
-        
-class BitGridScoreBoard:
+class BitInterfaceGridScoreBoard:
+    """ Renders a grid scoreboard interface """
     def __init__(self, height: int, width: int) -> None:
         """ Tetris board scoreboard """
         self.__height = height

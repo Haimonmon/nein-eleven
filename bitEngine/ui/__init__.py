@@ -1,7 +1,9 @@
-from .ui_window import BitWindow
-from .ui_grid import BitGrid, BitGridScoreBoard
+from .ui_window import BitInterfaceWindow
+from .ui_grid import BitInterfaceGrid, BitInterfaceGridScoreBoard
+from .ui_tetromino import BitInterfaceTetromino
 
 __all__ = [
-    "BitWindow",
-    "BitGrid", "BitGridScoreBoard",
+    "BitInterfaceWindow",
+    "BitInterfaceGrid", "BitInterfaceGridScoreBoard",
+    "BitInterfaceTetromino"
 ]

@@ -2,7 +2,8 @@ import sys
 import pygame
 from typing import Set
 from pathlib import Path
-class BitWindow:
+
+class BitInterfaceWindow:
     """ Bit Engine's Window """
 
     def __init__(self, height: int = 300, width: int = 600, title: str = "The Bit Engine", icon: str = "favicon.png", background_color: str | Set[int] = "#1A1A1A") -> None:
@@ -21,6 +22,7 @@ class BitWindow:
         """ Make the object be part of the loop  """
         self.game_objects.append(object)
         return object
+
 
     def render(self) -> None:
         """ Renders bit engine windows """
@@ -51,10 +53,14 @@ class BitWindow:
             self.screen.fill(self.background_color)
 
             for object in self.game_objects:
+                # * For logic updates objects
                 if hasattr(object, "update"):
                     object.update()
+                    
+                # * For interface renderings objects
                 if hasattr(object, "render"):
                     object.render(self.screen)
+
 
             pygame.display.flip()
             # * Frame per Seconds
@@ -69,6 +75,6 @@ class BitWindow:
 
 
 if __name__ == "__main__":
-      window = BitWindow()
+      window = BitInterfaceWindow()
       window.render()
       window.exit()

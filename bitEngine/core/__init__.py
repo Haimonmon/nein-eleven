@@ -1,5 +1,7 @@
-from .core_grid import BitGridLogics
+from .core_grid import BitLogicGrid, BitLogicTetrominoGridSpawner
+from .core_tetromino import BitLogicTetromino
 
 __all__ = [
-    "BitGridLogics"
+    "BitLogicGrid",
+    "BitLogicTetromino", "BitLogicTetrominoGridSpawner"
 ]
