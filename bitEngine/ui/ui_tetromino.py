@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class BitInterfaceTetromino:
     """ Renders a tetromino interface """
@@ -6,7 +7,23 @@ class BitInterfaceTetromino:
         self.tetromino_grid = tetromino_logic.grid_logic
         self.tetromino_logic = tetromino_logic
         self.cell_size = 30
-        self.color = "yellow"
+       
+        self.colors = [
+            "#FFD700",  # gold
+            "#FFB700",  # rich gold
+            "#FFA500",  # orange-gold
+            "#FFF8DC",  # cornsilk (soft gold highlight)
+            "#F5DEB3",  # wheat (warm golden tone)
+            "#FFFACD",  # lemon chiffon (light reflection)
+            "#FFDAB9",  # peach puff (soft highlight)
+            "#FFF5E1",  # champagne glow
+            "#E6BE8A",  # antique gold
+            "#B8860B",  # dark goldenrod (deep gold shadow)
+            "#DAA520",  # goldenrod
+            "#FFFAF0"   # floral white (flash reflection)
+        ]
+
+        self.color = random.choice(self.colors)
 
 
     def render(self, screen: pygame.Surface) -> None:
@@ -27,9 +44,9 @@ class BitInterfaceTetromino:
                 self.cell_size, self.cell_size
             )
 
-            pygame.draw.rect(screen, (255, 255, 0), rectangle)
+            pygame.draw.rect(screen, self.color, rectangle)
             
-            # * piece border
+            # # * piece border
             pygame.draw.rect(screen, (0, 0, 0), rectangle, 1)
 
 
