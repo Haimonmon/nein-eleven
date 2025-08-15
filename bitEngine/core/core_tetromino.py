@@ -2,13 +2,21 @@ from typing import List, Tuple, Dict, Literal
 
 
 class BitLogicTetromino:
-    def __init__(self, grid_logic) -> None:
+    """ Tetromino functionalities """
+    def __init__(self, grid_logic, width, height, piece_shape, coordinates) -> None:
         self.grid_logic = grid_logic
 
         # * For n grams
         self.word = None
-        self.piece_shape = None
-        self.coordinates: List[Tuple[int, int]] = []
+
+        # * By Blocks
+        self.width = width
+        self.height = height
+
+        # * Piece Name
+        self.piece_shape = piece_shape
+
+        self.coordinates: List[Tuple[int, int]] = coordinates
 
         self.landed = False
      
