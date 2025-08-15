@@ -34,17 +34,18 @@ class BitLogicTetrominoGridSpawner:
             "I": [(0, 0), (1, 0), (2, 0), (3, 0)]
         }
 
+        self.spawned_tetromino = None
+
 
     def update(self) -> None:
         # * Spawn once only for testing
-        if self.spawn_test:
+        if not self.spawned_tetromino or self.spawned_tetromino.landed:
             self.spawn(piece_shape = "i")
-            self.spawn_test = False
 
 
     def spawn(self, piece_shape: Literal["O", "I"] = "O") -> None:
         """ spawns tetromino pieces on the grid """
-        
+
         piece_shape = piece_shape.upper()
         # * I want the tetromino to spawn within in any area of the spawn 🫡
         start_x = random.randint(0, self.grid_logic.columns)
@@ -64,6 +65,8 @@ class BitLogicTetrominoGridSpawner:
             self.grid_logic.cell_coordinates[y][x] = 1
 
         created_tetromino.coordinates = tetromino_coordinates
+
+        self.spawned_tetromino = created_tetromino
         
 
     def create(self, piece_shape: Literal["0", "I"]) -> BitLogicTetromino:
