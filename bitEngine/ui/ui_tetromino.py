@@ -2,11 +2,12 @@ import pygame
 
 class BitInterfaceTetromino:
     """ Renders a tetromino interface """
-    def __init__(self, tetromino_logic):
+    def __init__(self, tetromino_logic) -> None:
         self.tetromino_grid = tetromino_logic.grid_logic
         self.tetromino_logic = tetromino_logic
         self.cell_size = 30
         self.color = "yellow"
+
 
     def render(self, screen: pygame.Surface) -> None:
         """ Renders tetromino """
@@ -29,7 +30,8 @@ class BitInterfaceTetromino:
             pygame.draw.rect(screen, (255, 255, 0), rectangle)
             
             # * piece border
-            pygame.draw.rect(screen, (0, 0, 0), rectangle, 1)   
+            pygame.draw.rect(screen, (0, 0, 0), rectangle, 1)
+
 
 if __name__ == "__main__":
       pass
