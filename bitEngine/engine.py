@@ -27,8 +27,6 @@ class BitEngine:
              raise BruhTheresNoWindows()
         
         grid_logic = self.window.add_object(BitLogicGrid(columns = 25))
-
-        tetromino_logic: Type = BitLogicTetromino
         grid_spawner_logic = self.window.add_object(BitLogicTetrominoGridSpawner(self.window, grid_logic)) 
 
         ui_grid = self.window.add_object(BitInterfaceGrid(grid_logic, display_grid = True))
