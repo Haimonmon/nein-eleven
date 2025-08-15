@@ -1,9 +1,9 @@
-from typing import List, Tuple, Dict, Literal
+from typing import List, Tuple
 import pygame
 
 class BitLogicTetromino:
     """ Tetromino functionalities """
-    def __init__(self, grid_logic, width, height, piece_shape, coordinates) -> None:
+    def __init__(self, grid_logic, width: int, height: int, piece_shape: str, coordinates: List[Tuple[int, int]], tick_speed: int = 500) -> None:
         self.grid_logic = grid_logic
 
         # * For n grams
@@ -21,7 +21,7 @@ class BitLogicTetromino:
         self.landed = False
 
         # * Gravity timing
-        self.gravity_delay = 500  # * milliseconds on falling
+        self.gravity_delay = tick_speed  # * milliseconds on falling
         self.last_gravity_time = pygame.time.get_ticks()
 
         self.falling_skip = 3
@@ -65,7 +65,6 @@ class BitLogicTetromino:
 
             # * Check bottom edge
             if new_y >= self.grid_logic.rows:
-                print(new_y, self.grid_logic.rows)
                 return True
 
             # * Check collision with other blocks (ignore current piece's own cells)

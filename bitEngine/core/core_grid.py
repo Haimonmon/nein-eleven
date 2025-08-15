@@ -20,8 +20,10 @@ class BitLogicGrid:
 
 class BitLogicTetrominoGridSpawner:
     """ Basically just a spawner 🤓☝️"""
-    def __init__(self, window, grid_logic: BitLogicGrid):
+    def __init__(self, window, grid_logic: BitLogicGrid, tick_speed: int = 500):
         self.window = window 
+
+        self.tick_speed = tick_speed
 
         self.grid_logic = grid_logic
         self.tetromino_logic = BitLogicTetromino
@@ -31,7 +33,12 @@ class BitLogicTetrominoGridSpawner:
 
         self.piece: Dict[str, List[Tuple[int, int]]] = {
             "O": [(0, 0), (1, 0), (0, 1), (1, 1)],
-            "I": [(0, 0), (1, 0), (2, 0), (3, 0)]
+            "I": [(0, 0), (1, 0), (2, 0), (3, 0)],
+            "T": [(1, 0), (0, 1), (1, 1), (2, 1)],
+            "L": [(0, 0), (0, 1), (0, 2), (1, 2)],
+            "J": [(1, 0), (1, 1), (1, 2), (0, 2)],
+            "S": [(1, 0), (2, 0), (0, 1), (1, 1)],
+            "Z": [(0, 0), (1, 0), (1, 1), (2, 1)]
         }
 
         self.spawned_tetromino = None
@@ -40,7 +47,7 @@ class BitLogicTetrominoGridSpawner:
     def update(self) -> None:
         # * Spawn once only for testing
         if not self.spawned_tetromino or self.spawned_tetromino.landed:
-            self.spawn(piece_shape = "i")
+            self.spawn(piece_shape = random.choice(list(self.piece.keys())))
 
 
     def spawn(self, piece_shape: Literal["O", "I"] = "O") -> None:
@@ -77,7 +84,7 @@ class BitLogicTetrominoGridSpawner:
         tetromino_width = max(x for x, _ in coordinates)
         tetromino_height = max(y for _, y in coordinates)
 
-        created_logic_tetromino: BitLogicTetromino = self.tetromino_logic(self.grid_logic, tetromino_width, tetromino_height, piece_shape, coordinates)
+        created_logic_tetromino: BitLogicTetromino = self.tetromino_logic(self.grid_logic, tetromino_width, tetromino_height, piece_shape, coordinates, self.tick_speed)
 
         # * ADDS TO THE WINDOW SURFACE
         self.window.add_object(created_logic_tetromino)
