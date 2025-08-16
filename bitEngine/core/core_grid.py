@@ -61,8 +61,8 @@ class BitLogicTetrominoGridSpawner:
         created_tetromino: BitLogicTetromino = self.create(piece_shape)
 
         # * Solution for over exceeding of tetromino because of randint
-        if start_x + created_tetromino.width >= self.grid_logic.columns:
-            start_x = self.grid_logic.columns - created_tetromino.width - 1
+        if start_x + created_tetromino.max_x >= self.grid_logic.columns:
+            start_x = self.grid_logic.columns - created_tetromino.max_x - 1
 
         # * Change tetromino coordinates base on grid
         tetromino_coordinates = [(x + start_x, y + start_y) for x, y in created_tetromino.coordinates]
@@ -81,10 +81,7 @@ class BitLogicTetrominoGridSpawner:
 
         coordinates = self.piece.get(piece_shape)
 
-        tetromino_width = max(x for x, _ in coordinates)
-        tetromino_height = max(y for _, y in coordinates)
-
-        created_logic_tetromino: BitLogicTetromino = self.tetromino_logic(self.grid_logic, tetromino_width, tetromino_height, piece_shape, coordinates, self.tick_speed)
+        created_logic_tetromino: BitLogicTetromino = self.tetromino_logic(self.grid_logic, piece_shape, coordinates, self.tick_speed)
 
         # * ADDS TO THE WINDOW SURFACE
         self.window.add_object(created_logic_tetromino)
