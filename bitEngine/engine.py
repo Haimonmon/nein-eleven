@@ -38,11 +38,7 @@ class Bit:
 
 
 if __name__ == "__main__":
-        engine = Bit(tick_speed = -5)
+        engine = Bit(tick_speed=-2)
         engine.create_window()
-        engine.create_grid(
-             rows = 25,
-             columns = 40,
-             display_grid = False
-        )
+        engine.create_grid()
         engine.play()
