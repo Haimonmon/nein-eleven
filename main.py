@@ -1,16 +1,16 @@
 import pages
-import BitEngine
+import bitEngine
 
 class Tetra:
     """ Welcome to Tetra game """
     def __init__(self):
-        self.engine = BitEngine
-        self.window = self.engine.BitWindow(height = 740, width = 1200)
+        self.engine = bitEngine.Bit()
+        self.window = self.engine.create_window()
         self.main_game = pages.MainGame(self)
 
     def start(self) -> None:
         self.main_game.render()
-        self.window.render()
+        
        
         
 
