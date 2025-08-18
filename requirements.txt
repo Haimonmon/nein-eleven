@@ -1,4 +1,2 @@
 pygame
-pickle
-test
 rich
