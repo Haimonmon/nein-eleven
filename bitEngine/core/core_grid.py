@@ -3,7 +3,7 @@ import random
 from typing import Literal, Dict, List, Tuple, Type
 
 from .core_tetromino import BitLogicTetromino
-from BitEngine.ui import BitInterfaceTetromino
+from bitEngine.ui import BitInterfaceTetromino
 
 class BitLogicGrid:
     """ Collision logics """
