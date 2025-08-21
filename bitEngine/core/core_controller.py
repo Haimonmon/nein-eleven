@@ -50,6 +50,17 @@ class BitLogicController:
                 if event.key == pygame.K_DOWN:
                     self.move(0, 1)
 
+                if hasattr(self.object, "hard_drop"):
+                    if event.key == pygame.K_SPACE:
+                        self.object.hard_drop()
+
+                if hasattr(self.object, "rotate"):
+                    if event.key == pygame.K_x:
+                        self.object.rotate("clock_wise")
+                    
+                    if event.key == pygame.K_z:
+                        self.object.rotate("counter_clock_wise")
+
 if __name__ == "__main__":
       pass
 
