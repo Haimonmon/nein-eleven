@@ -11,9 +11,6 @@ class Tetra:
     def start(self) -> None:
         self.main_game.render()
         
-       
-        
-
 if __name__ == "__main__":
     tetris = Tetra()
     tetris.start()
