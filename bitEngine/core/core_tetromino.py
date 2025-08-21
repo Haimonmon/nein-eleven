@@ -1,5 +1,6 @@
-from typing import List, Tuple
 import pygame
+
+from typing import List, Tuple, Literal
 
 class BitLogicTetromino:
     """ Tetromino functionalities """
@@ -75,7 +76,7 @@ class BitLogicTetromino:
         for x, y in self.coordinates:
             self.grid_logic.cell_coordinates[y][x] = 0
 
-        if not self.check_collision(dx = dx, dy = dy):
+        if not self.check_collision(self.coordinates, dx = dx, dy = dy):
             self.coordinates = new_coordinates
 
         for x, y in self.coordinates:
@@ -102,9 +103,9 @@ class BitLogicTetromino:
             self.last_gravity_time = now
 
 
-    def check_collision(self, dx: int = 0, dy: int = 0) -> bool:
+    def check_collision(self, coordinates: List[Tuple[int, int]], dx: int = 0, dy: int = 0) -> bool:
         """ collision logic """
-        for x, y in self.coordinates:
+        for x, y in coordinates:
             new_x = x + dx
             new_y = y + dy
 
@@ -125,33 +126,40 @@ class BitLogicTetromino:
             
         return False
     
-
-    def rotate(self, direction: str = "cw") -> None:
+    def rotate(self, direction: Literal["clock_wise", "counter_clock_wise"] = "clock_wise") -> None:
         """ Rotates tetromino counter or in clockwise turn """
         if not self.coordinates:
             return
         
-        # ! STILL FIXING
         # * find's pivot or center point
-        px = sum(x for x, _ in self.coordinates) / len(self.coordinates)
-        py = sum(y for _, y in self.coordinates) / len(self.coordinates)
+        px, py = self._get_block_pivot()
 
         new_coords = []
 
-        for (x, y) in self.coordinates:
-            x -= px
-            y -= py
+        for x, y in self.coordinates:
+            dx = x - px
+            dy = y - py
+        
+            if direction == "clock_wise":
+                new_x = px + dy
+                new_y = py - dx
+            
+            if direction == "counter_clock_wise":
+                new_x = px - dy
+                new_y = py + dx
+        
+            new_coords.append((new_x, new_y))
 
-            # * Rotatation
-            if direction == "cw":
-                x, y = y, -x
-            elif direction == "ccw":
-                x, y = -y, x
+        if not self.check_collision(new_coords):
+            self.change_coordinates(new_coords)
 
-            new_coords.append((round(x + px), round(y + py)))
-
-        self.change_coordinates(new_coords)
     
+    def hard_drop(self) -> None:
+        """ Rapid drop of the tetromino, kinda like slamdunk in tetris 🔥 """
+        while not self.check_collision(self.coordinates, dy = 1):
+            self.change_coordinates([(x, y + 1) for x, y in self.coordinates])
+        
+        self.landed = True
 
 if __name__ == "__main__":
       pass
