@@ -70,15 +70,13 @@ class BitLogicTetromino:
         return (pivot_x, pivot_y)
 
 
-    def change_coordinates(self, new_coordinates: List[Tuple[int, int]], falling_skip: int = 1) -> None:
+    def change_coordinates(self, new_coordinates: List[Tuple[int, int]],dx: int = 0, dy: int = 1) -> None:
         """ Change tetromino coordinates state """
         for x, y in self.coordinates:
             self.grid_logic.cell_coordinates[y][x] = 0
 
-        if not self.check_collision(dy = falling_skip):
+        if not self.check_collision(dx = dx, dy = dy):
             self.coordinates = new_coordinates
-        else:
-            self.landed = True
 
         for x, y in self.coordinates:
             self.grid_logic.cell_coordinates[y][x] = 1
@@ -99,7 +97,7 @@ class BitLogicTetromino:
 
         if now - self.last_gravity_time >= self.gravity_delay:
 
-            self.change_coordinates([(x, y + falling_skip) for (x, y) in self.coordinates], falling_skip)
+            self.change_coordinates([(x, y + falling_skip) for (x, y) in self.coordinates], dx = 0, dy = falling_skip)
             
             self.last_gravity_time = now
 
@@ -110,18 +108,21 @@ class BitLogicTetromino:
             new_x = x + dx
             new_y = y + dy
 
-            # * Check left or right edges
-            # if new_x < 0 or new_x >= self.width:
-            #     return True
-
+            # * Check left edges and right edges
+            if new_x < 0 or new_x >= self.grid_logic.columns:
+                return True
+                          
             # * Check bottom edge
             if new_y >= self.grid_logic.rows:
+                self.landed = True
                 return True
-
+            
             # * Check collision with other blocks (ignore current piece's own cells)
             if self.grid_logic.cell_coordinates[new_y][new_x] != 0 and (new_x, new_y) not in self.coordinates:
+                if dy > 0:
+                    self.landed = True
                 return True
-
+            
         return False
     
 
