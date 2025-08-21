@@ -118,4 +118,7 @@ TODO:
 2. Since trigrams is the max for now, can you try put 4 grams?, or any num of grams?, support for any type of grams? (OPTIONAL TASK)
 
 3. Create backoff method
+
+4. on utils folder, theres a pickle_file.py there, apply pickle on our ngrams, modified the class there for pickle implementation
+   the pickle data is stored on data\pickles\ folder 
 """
