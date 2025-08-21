@@ -5,5 +5,5 @@ from .ui_tetromino import BitInterfaceTetromino
 __all__ = [
     "BitInterfaceWindow",
     "BitInterfaceGrid", "BitInterfaceGridScoreBoard",
-    "BitInterfaceTetromino",
+    "BitInterfaceTetromino"
 ]
