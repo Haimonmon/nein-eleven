@@ -55,7 +55,8 @@ class NGrams:
 
     def next_possible_words(self, phrase: str):
         """
-        Suggest ALL possible next words based on the corpus.
+        Suggest ALL possible next words based on the corpus,
+        with counts and probabilities.
         """
         words = phrase.split()
 
@@ -79,7 +80,12 @@ class NGrams:
 
         # Sort candidates by frequency (highest first)
         candidates.sort(key=lambda x: x[1], reverse=True)
-        return candidates
+
+        # Compute probabilities
+        total = sum(c for _, c in candidates)
+        candidates_with_prob = [(word, count, count / total) for word, count in candidates]
+
+        return candidates_with_prob, total
 
 
 # === DEBUG MODE ===
@@ -94,12 +100,12 @@ if __name__ == "__main__":
         print(f"\n'{query}' appears {count} times in the corpus.")
 
         # Next word prediction
-        next_words = model.next_possible_words(query)
+        next_words, total = model.next_possible_words(query)
         if next_words:
-            total = sum(freq for _, freq in next_words)
-            print(f"\nNext possible words after '{query}' ")
-            for word, freq in next_words:
-                print(f"  {word:10} ({freq} times)")
+            print(f"\nNext possible words after '{query}' "
+                  f"(showing all {len(next_words)} options, total {total} appearances):")
+            for word, freq, prob in next_words:
+                print(f"  {word:10} ({freq} times, {prob*100:.2f}%)")
         else:
             print("\nNo continuation found in corpus.")
 
