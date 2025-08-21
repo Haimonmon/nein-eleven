@@ -4,14 +4,16 @@ class MainGame:
     """ Here lies the fun and gameplay """
     def __init__(self, main):
         self.main = main
-        self.window: bitEngine.BitInterfaceWindow = main.window
-        self.grid = self.main.engine.create_grid()
-        # self.grid: bitEngine.BitInterfaceGrid = bitEngine.BitInterfaceGrid(columns = 25, cell_size = 30, display_grid = True, border_width = 3) 
+        self.engine: bitEngine.Bit = main.engine
+
+        self.window = main.window
+        self.grid = self.engine.create_grid(columns=10)
+        self.controller = self.engine.add_controller(self.grid)
         
 
     def render(self) -> None:
         # self.window.background_color =  "#DFA05D"
-        self.main.engine.play()
+        self.engine.play()
      
 
 
