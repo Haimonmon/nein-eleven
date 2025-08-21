@@ -28,7 +28,11 @@ class BitInterfaceTetromino:
 
     def render(self, screen: pygame.Surface) -> None:
         """ Renders tetromino """
-        
+        self.draw_tetromino(screen)
+       
+
+    def draw_tetromino(self, screen: pygame.Surface) -> None:
+        """ Draws tetromino """
         windows_width, windows_height = screen.get_size()
 
         board_width: int = self.tetromino_grid.columns * self.cell_size
@@ -48,7 +52,6 @@ class BitInterfaceTetromino:
             
             # # * piece border
             pygame.draw.rect(screen, (0, 0, 0), rectangle, 1)
-
 
 if __name__ == "__main__":
       pass
