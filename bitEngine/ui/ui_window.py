@@ -14,14 +14,53 @@ class BitInterfaceWindow:
         self.icon = f"./bitEngine/assets/{icon}"
 
         self.running = False
+
         self.screen = None
+
+        self.events = None
+
         self.game_objects = []
+
 
 
     def add_object(self, object: object) -> object:
         """ Make the object be part of the loop  """
         self.game_objects.append(object)
         return object
+
+
+    def gameloop(self) -> None:
+        """ Performs the whole gameloop of the game """
+        clock = pygame.time.Clock()
+        self.running = True
+
+        while self.running:
+            self.events = pygame.event.get()
+
+            for event in self.events:
+                if event.type == pygame.QUIT:
+                    self.running = False
+                    print("Goodbye and Thanks")
+
+            self.screen.fill(self.background_color)
+
+            for object in self.game_objects:
+                # * For logic updates objects
+                if hasattr(object, "update"):
+                    object.update()
+
+                # * For logic controller objects
+                if hasattr(object, "control"):
+                    object.control(self.events)
+                    
+                # * For interface renderings objects
+                if hasattr(object, "render"):
+                    object.render(self.screen)
+
+
+            pygame.display.flip()
+            # * Frame per Seconds
+            clock.tick(60)
 
 
     def render(self) -> None:
@@ -37,34 +76,6 @@ class BitInterfaceWindow:
         pygame.display.set_icon(icon)
 
         self.gameloop()
-
-
-    def gameloop(self) -> None:
-        """ Performs the whole gameloop of the game """
-        clock = pygame.time.Clock()
-        self.running = True
-
-        while self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                    print("Goodbye and Thanks")
-
-            self.screen.fill(self.background_color)
-
-            for object in self.game_objects:
-                # * For logic updates objects
-                if hasattr(object, "update"):
-                    object.update()
-                    
-                # * For interface renderings objects
-                if hasattr(object, "render"):
-                    object.render(self.screen)
-
-
-            pygame.display.flip()
-            # * Frame per Seconds
-            clock.tick(60)
 
 
     def exit(self) -> None:
