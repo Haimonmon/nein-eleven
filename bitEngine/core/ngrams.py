@@ -1,5 +1,5 @@
 import os
-from collections import Counter, defaultdict
+from collections import Counter
 
 
 class NGrams:
@@ -22,7 +22,8 @@ class NGrams:
                 if not line:
                     continue
 
-                tokens = ["<s>"] + line.split() + ["<s/>"]
+                # normalize case
+                tokens = ["<s>"] + line.lower().split() + ["<s/>"]
 
                 # Generate n-grams up to max_n
                 for n in range(1, self.max_n + 1):
@@ -39,7 +40,7 @@ class NGrams:
         Count how many times the given phrase appears in the corpus.
         Works for any n <= max_n.
         """
-        words = tuple(phrase.split())
+        words = tuple(phrase.lower().split())
         n = len(words)
 
         if n > self.max_n:
@@ -53,7 +54,7 @@ class NGrams:
         Start from highest n-gram available for context,
         and fallback until we find candidates.
         """
-        words = phrase.split()
+        words = phrase.lower().split()
         candidates = []
 
         # Start from highest order (max_n)
@@ -69,7 +70,7 @@ class NGrams:
                 ]
 
                 if candidates:
-                    break
+                    break 
 
         # If still nothing, return most common unigrams
         if not candidates:
@@ -108,7 +109,6 @@ if __name__ == "__main__":
 
     except FileNotFoundError as e:
         print(f"Error: {e}")
-
 
 
 """
