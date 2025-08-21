@@ -13,7 +13,7 @@ python python .\config\transfer_tsv.py
 
 ### CONTROLS
 
-<table>
+<table align=center>
   <tr>
     <th colspan="2"><h4 align=center>PC 💻</h4></th>
   </tr>
