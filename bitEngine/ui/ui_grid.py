@@ -25,6 +25,11 @@ class BitInterfaceGrid:
 
     def render(self, screen: pygame.Surface) -> None:
         """ Renders a tetris board """
+        self.draw_board(screen)
+    
+
+    def draw_board(self, screen: pygame.Surface) -> None:
+        """ Draws tetromino board """
 
         windows_width, windows_height = screen.get_size()
 
@@ -35,24 +40,27 @@ class BitInterfaceGrid:
         self.offset_y: int = (windows_height - self.board_height) // 2
 
         self._get_cell_coordinates()
-        
+
         # * For board row
         for row in range(self.grid_logic.rows + 1):
             if row in [0, self.grid_logic.rows] and not self.display_grid:
-                self.draw_vertical_line(screen, self.offset_x, self.offset_y, row, self.board_width, self.border_color, self.border_width)
-            
-            if self.display_grid:
-                self.draw_vertical_line(screen, self.offset_x, self.offset_y, row, self.board_width, self.border_color)
+                self.draw_vertical_line(screen, self.offset_x, self.offset_y,
+                                        row, self.board_width, self.border_color, self.border_width)
 
+            if self.display_grid:
+                self.draw_vertical_line(
+                    screen, self.offset_x, self.offset_y, row, self.board_width, self.border_color)
 
         # * For board columns
         for column in range(self.grid_logic.columns + 1):
             if column in [0, self.grid_logic.columns] and not self.display_grid:
-                self.draw_horizontal_line(screen, self.offset_x, self.offset_y, column, self.board_height, self.border_color, self.border_width)
-            
-            if self.display_grid:
-                self.draw_horizontal_line(screen, self.offset_x, self.offset_y, column, self.board_height, self.border_color)
+                self.draw_horizontal_line(screen, self.offset_x, self.offset_y,
+                                          column, self.board_height, self.border_color, self.border_width)
 
+            if self.display_grid:
+                self.draw_horizontal_line(
+                    screen, self.offset_x, self.offset_y, column, self.board_height, self.border_color)
+                
 
     def draw_vertical_line(self, screen: pygame.Surface, offset_x: float, offset_y: float, row: int, board_width: int, color: Set[int] = (100, 100, 100), width: int = 1) -> None:
         """ Draws a perfect line base within its coordinate """
