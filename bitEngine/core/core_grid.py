@@ -3,6 +3,8 @@ import random
 from typing import Literal, Dict, List, Tuple, Type
 
 from .core_tetromino import BitLogicTetromino
+from .core_controller import BitLogicController
+
 from bitEngine.ui import BitInterfaceTetromino
 
 class BitLogicGrid:
@@ -43,16 +45,18 @@ class BitLogicTetrominoGridSpawner:
 
         self.spawned_tetromino = None
 
+        self.controller = None
+
 
     def update(self) -> None:
         # * Spawn once only for testing
         if not self.spawned_tetromino or self.spawned_tetromino.landed:
             self.spawn(piece_shape = random.choice(list(self.piece.keys())))
-
-
-    def spawn(self, piece_shape: Literal["O", "I"] = "O") -> None:
+        
+        
+    def spawn(self, piece_shape: Literal["O", "I", "T", "L", "J", "S", "Z"] = "O") -> None:
         """ spawns tetromino pieces on the grid """
-
+            
         piece_shape = piece_shape.upper()
         # * I want the tetromino to spawn within in any area of the spawn 🫡
         start_x = random.randint(0, self.grid_logic.columns)
@@ -60,12 +64,14 @@ class BitLogicTetrominoGridSpawner:
 
         created_tetromino: BitLogicTetromino = self.create(piece_shape)
 
-        # * Solution for over exceeding of tetromino because of randint
+        # * Solution for over exceeding of tetromino because of randint     
         if start_x + created_tetromino.max_x >= self.grid_logic.columns:
             start_x = self.grid_logic.columns - created_tetromino.max_x - 1
 
+        
         # * Change tetromino coordinates base on grid
         tetromino_coordinates = [(x + start_x, y + start_y) for x, y in created_tetromino.coordinates]
+       
         
         # * Position Tetromino on the grid
         for x, y in tetromino_coordinates:
