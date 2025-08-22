@@ -26,6 +26,7 @@ class BitLogicTetromino:
         self.coordinates: List[Tuple[int, int]] = coordinates
 
         self.landed = False
+        self.indicator = False
 
         # * Gravity timing
         self.gravity_delay = tick_speed  # * milliseconds on falling
@@ -40,9 +41,6 @@ class BitLogicTetromino:
         self._get_width()
         self._get_height()
 
-        self.shift_downed = False
-        self.row_to_shift = set()
-    
 
     def _get_height(self) -> None:
         """ gets latest tetromino height """
@@ -125,12 +123,35 @@ class BitLogicTetromino:
             # * Check bottom edge
             if new_y >= self.grid_logic.rows:
                 self.landed = True
+                self.indicator = False
                 return True
             
             # * Check collision with other blocks (ignore current piece's own cells)
             if self.grid_logic.cell_coordinates[new_y][new_x] != 0 and (new_x, new_y) not in self.coordinates:
                 if dy > 0:
                     self.landed = True
+                    self.indicator = False
+                return True
+            
+        return False
+    
+
+    def see_collision(self, coordinates: List[Tuple[int, int]], dx: int = 0, dy: int = 0) -> bool:
+        """ just collision logic without changing attributes """
+        for x, y in coordinates:
+            new_x = x + dx
+            new_y = y + dy
+
+            # * Check left edges and right edges
+            if new_x < 0 or new_x >= self.grid_logic.columns:
+                return True
+                          
+            # * Check bottom edge
+            if new_y >= self.grid_logic.rows:
+                return True
+            
+            # * Check collision with other blocks (ignore current piece's own cells)
+            if self.grid_logic.cell_coordinates[new_y][new_x] != 0 and (new_x, new_y) not in self.coordinates:
                 return True
             
         return False
@@ -170,6 +191,7 @@ class BitLogicTetromino:
             self.change_coordinates([(x, y + 1) for x, y in self.coordinates])
         
         self.landed = True
+        self.indicator = False
 
 
     def remove_rows(self, rows: set[int]) -> None:
@@ -198,10 +220,25 @@ class BitLogicTetromino:
             self.grid_logic.cell_coordinates[y][x] = 1
 
 
+    def get_ghost_coords(self) -> list[tuple[int, int]]:
+        """ Tetromino indicator """
+        if not self.indicator:
+            return 
+        
+        ghost_coords = self.coordinates.copy()
+        while True:
+            test_coords = [(x, y + 1) for (x, y) in ghost_coords]
+            if self.see_collision(test_coords):
+                break
+            ghost_coords = test_coords
+        return ghost_coords
+
+
     def __debug(self, piece_name: str, string: str) -> None:
         piece_name = piece_name.upper()
         if self.piece_shape == piece_name:
             print(string)
+            
 
 if __name__ == "__main__":
       pass
