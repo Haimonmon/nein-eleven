@@ -47,7 +47,6 @@ class BitInterfaceNextPieceView:
         )
 
 
-
     def draw_dummy_tetromino(self, screen: pygame.Surface) -> None:
         """ Draws dummy tetrominoes, not fully controllable but for display """
         next_pieces = self.next_piece_logic.peek_next(self.num_piece_display)

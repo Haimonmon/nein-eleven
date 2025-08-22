@@ -4,25 +4,12 @@ import random
 from typing import List, Tuple
 class BitInterfaceTetromino:
     """ Renders a tetromino interface """
-    def __init__(self, tetromino_logic) -> None:
+    def __init__(self, tetromino_logic, color) -> None:
         self.tetromino_grid = tetromino_logic.grid_logic
         self.tetromino_logic = tetromino_logic
         self.cell_size = 30
 
-        self.color = [
-            "#FFD700",  # gold
-            "#FFB700",  # rich gold
-            "#FFA500",  # orange-gold
-            "#FFF8DC",  # cornsilk (soft gold highlight)
-            "#F5DEB3",  # wheat (warm golden tone)
-            "#FFFACD",  # lemon chiffon (light reflection)
-            "#FFDAB9",  # peach puff (soft highlight)
-            "#FFF5E1",  # champagne glow
-            "#E6BE8A",  # antique gold
-            "#B8860B",  # dark goldenrod (deep gold shadow)
-            "#DAA520",  # goldenrod
-            "#FFFAF0"   # floral white (flash reflection)
-        ]
+        self.color = color
         
         if isinstance(self.color, list):
             self.chosen_color = random.choice(self.color)
