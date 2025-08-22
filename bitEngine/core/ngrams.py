@@ -1,124 +1,77 @@
+import json
 import os
 from collections import Counter
 
-
-class NGrams:
-    def __init__(self):
-        self.unigram_counts = Counter()
-        self.bigram_counts = Counter()
-        self.trigram_counts = Counter()
-        self.total_unigrams = 0
-
-    def process(self, file_path="BitEngine/data/sentences/eng_sentences.txt"):
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"{file_path} does not exist.")
-
-        with open(file_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-
-                tokens = ["<s>"] + line.split() + ["<s/>"]
-
-                # Unigrams
-                self.unigram_counts.update(tokens)
-
-                # Bigrams
-                bigrams = zip(tokens[:-1], tokens[1:])
-                self.bigram_counts.update(bigrams)
-
-                # Trigrams
-                trigrams = zip(tokens[:-2], tokens[1:-1], tokens[2:])
-                self.trigram_counts.update(trigrams)
-
-        self.total_unigrams = sum(self.unigram_counts.values())
-
-    def count_occurrences(self, phrase: str):
+class TetrisNGramAI:
+    def __init__(self, corpus_file="bitEngine/data/training_data/pattern1.json", n=2):
         """
-        Count how many times the given phrase appears in the corpus.
-        Works for unigram, bigram, and trigram.
+        n: size of N-gram (2 for bigram, 3 for trigram, etc.)
         """
-        words = phrase.split()
+        self.corpus_file = corpus_file
+        self.n = n
+        self.ngram_counts = Counter()
+        self.history_sequence = []
 
-        if len(words) == 1:
-            return self.unigram_counts[words[0]]
+    def load_corpus(self):
+        if not os.path.exists(self.corpus_file):
+            print("⚠️ No corpus file found.")
+            return
 
-        elif len(words) == 2:
-            return self.bigram_counts[tuple(words)]
+        with open(self.corpus_file, "r") as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                print("⚠️ Invalid JSON in pattern.json")
+                return
 
-        elif len(words) == 3:
-            return self.trigram_counts[tuple(words)]
+        # Extract sequence of current_piece only
+        self.history_sequence = [entry["piece"] for entry in data]
 
-        else:
-            raise ValueError(
-                "Only unigram, bigram, and trigram counts are supported.")
+        # Build n-grams from sequence
+        for i in range(len(self.history_sequence) - self.n + 1):
+            ngram = tuple(self.history_sequence[i:i+self.n])
+            self.ngram_counts[ngram] += 1
 
-    def next_possible_words(self, phrase: str):
+    def predict_next_piece(self, last_pieces):
         """
-        Suggest ALL possible next words based on the corpus.
+        last_pieces: list of last (n-1) pieces
+        Returns: list of next piece candidates sorted by frequency
         """
-        words = phrase.split()
+        if len(last_pieces) != self.n - 1:
+            raise ValueError(f"Provide exactly {self.n - 1} last pieces")
 
-        if len(words) == 1:
-            w1 = words[0]
-            # Look for bigrams (w1, next)
-            candidates = [(w2, c)
-                          for (x, w2), c in self.bigram_counts.items() if x == w1]
+        candidates = Counter()
+        for ngram, count in self.ngram_counts.items():
+            if ngram[:-1] == tuple(last_pieces):
+                candidates[ngram[-1]] = count
 
-        elif len(words) == 2:
-            w1, w2 = words
-            # Look for trigrams (w1, w2, next)
-            candidates = [(w3, c) for (
-                x, y, w3), c in self.trigram_counts.items() if x == w1 and y == w2]
+        if not candidates:
+            return []
 
-        elif len(words) == 3:
-            # Use the last two words as context
-            w2, w3 = words[-2], words[-1]
-            candidates = [(w4, c) for (
-                x, y, w4), c in self.trigram_counts.items() if x == w2 and y == w3]
+        # Sort by frequency descending
+        return [piece for piece, _ in candidates.most_common()]
 
-        else:
-            raise ValueError(
-                "Only unigram, bigram, and trigram contexts are supported.")
-
-        # Sort candidates by frequency (highest first)
-        candidates.sort(key=lambda x: x[1], reverse=True)
-        return candidates
+    def show_ngrams(self, top=5):
+        print(f"Top {top} {self.n}-grams:")
+        for ngram, count in self.ngram_counts.most_common(top):
+            print(f"  {ngram} -> {count} times")
 
 
-# === DEBUG MODE ===
 if __name__ == "__main__":
-    model = NGrams()
-    try:
-        model.process()
-        query = input("Enter a word/phrase to analyze: ").strip()
+    ai = TetrisNGramAI(n=2)
+    ai.load_corpus()
+    ai.show_ngrams()
 
-        # Count
-        count = model.count_occurrences(query)
-        print(f"\n'{query}' appears {count} times in the corpus.")
+    # Example prediction using last piece
+    if len(ai.history_sequence) >= 1:
+        last_piece = ai.history_sequence[-1:]
+        prediction = ai.predict_next_piece(last_piece)
+        print(f"\nPrediction after last piece {last_piece}: {prediction}")
 
-        # Next word prediction
-        next_words = model.next_possible_words(query)
-        if next_words:
-            total = sum(freq for _, freq in next_words)
-            print(f"\nNext possible words after '{query}' ")
-            for word, freq in next_words:
-                print(f"  {word:10} ({freq} times)")
-        else:
-            print("\nNo continuation found in corpus.")
-
-    except FileNotFoundError as e:
-        print(f"Error: {e}")
-
-"""
-TODO:
-1. Spell Casing needs some improvements
-
-2. Since trigrams is the max for now, can you try put 4 grams?, or any num of grams?, support for any type of grams? (OPTIONAL TASK)
-
-3. Create backoff method
-
-4. on utils folder, theres a pickle_file.py there, apply pickle on our ngrams, modified the class there for pickle implementation
-   the pickle data is stored on data\pickles\ folder 
-"""
+    # Example prediction using last two pieces for trigram
+    if len(ai.history_sequence) >= 2:
+        ai_trigram = TetrisNGramAI(n=3)
+        ai_trigram.load_corpus()
+        last_two = ai_trigram.history_sequence[-2:]
+        prediction_tri = ai_trigram.predict_next_piece(last_two)
+        print(f"\nPrediction after last two pieces {last_two}: {prediction_tri}")

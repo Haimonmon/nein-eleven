@@ -1,0 +1,14 @@
+[
+    {
+        "board": "0001110000|1111111111",
+        "piece": "I",
+        "action": "drop",
+        "reward": 1
+    },
+    {
+        "board": "0001110000|1111111111",
+        "piece": "I",
+        "action": "rotate",
+        "reward": 0
+    }
+]
