@@ -45,8 +45,10 @@ class Bit:
     def create_grid(self, rows: int = 20, columns: int = 30, cell_size: int = 30, display_grid: bool = True, border_color: str | Tuple[int] = (100, 100, 100), border_width: int = 1) -> None:
         """ Creates a tetris board or grid """
       
-        grid_logic = self.window.add_object(BitLogicGrid(rows, columns))
+        grid_logic = self.window.add_object(BitLogicGrid(self.window, rows, columns))
         grid_spawner = self.window.add_object(BitLogicTetrominoGridSpawner(self.window, grid_logic, self.tick_speed)) 
+
+        self.window.add_object(BitLogicLineCleaner(self.window, grid_logic, grid_logic.rows))
 
         self.window.add_object(BitInterfaceGrid(grid_logic, cell_size, display_grid, border_color, border_width))
 

@@ -1,7 +1,7 @@
 import sys
 import pygame
-from typing import Set
-from pathlib import Path
+from typing import Set, List
+
 
 class BitInterfaceWindow:
     """ Bit Engine's Window """
@@ -22,11 +22,17 @@ class BitInterfaceWindow:
         self.game_objects = []
 
 
-
     def add_object(self, object: object) -> object:
         """ Make the object be part of the loop  """
         self.game_objects.append(object)
         return object
+    
+
+    def get_objects(self, name: str = None) -> List[object]:
+        """ Returns objects you want to get """
+        if name is None:
+            return self.game_objects
+        return [obj for obj in self.game_objects if obj.__class__.__name__ == name]
 
 
     def gameloop(self) -> None:

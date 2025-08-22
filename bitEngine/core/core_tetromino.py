@@ -39,16 +39,25 @@ class BitLogicTetromino:
 
         self._get_width()
         self._get_height()
+
+        self.shift_downed = False
+        self.row_to_shift = set()
     
 
     def _get_height(self) -> None:
         """ gets latest tetromino height """
+        if not self.coordinates:
+            return
+        
         ys = [y for _, y in self.coordinates]
         self.height = max(ys) - min(ys) + 1
 
 
     def _get_width(self) -> None:
         """ gets latest tetromino width """
+        if not self.coordinates:
+            return 
+        
         xs = [x for x, _ in self.coordinates]
         self.width = max(xs) - min(xs) + 1
     
@@ -88,7 +97,7 @@ class BitLogicTetromino:
         self.apply_gravity()
         self._get_width()
 
-
+       
     def apply_gravity(self, falling_skip: int = 1) -> None:
         """ falling state of the tetromino """
         if not self.coordinates:
@@ -98,7 +107,7 @@ class BitLogicTetromino:
 
         if now - self.last_gravity_time >= self.gravity_delay:
 
-            self.change_coordinates([(x, y + falling_skip) for (x, y) in self.coordinates], dx = 0, dy = falling_skip)
+            self.change_coordinates([(x, min(y + falling_skip, self.grid_logic.rows - 1)) for (x, y) in self.coordinates], dx = 0, dy = 1)
             
             self.last_gravity_time = now
 
@@ -126,6 +135,7 @@ class BitLogicTetromino:
             
         return False
     
+
     def rotate(self, direction: Literal["clock_wise", "counter_clock_wise"] = "clock_wise") -> None:
         """ Rotates tetromino counter or in clockwise turn """
         if not self.coordinates:
@@ -161,5 +171,38 @@ class BitLogicTetromino:
         
         self.landed = True
 
+
+    def remove_rows(self, rows: set[int]) -> None:
+            """ Removes specific rows in a tetrominoes coordinates """
+            self.coordinates = [(x, y) for (x, y) in self.coordinates if y not in rows]
+
+            for y in rows:
+                for x in range(self.grid_logic.columns):
+                    self.grid_logic.cell_coordinates[y][x] = 0
+
+    
+    def shift_down(self, rows: set[int]) -> None:
+        """ Shifts down block """        
+        new_coords = []
+
+        for (x, y) in self.coordinates:
+            shift = sum(1 for row in rows if row >= y)
+            new_coords.append((x, y + shift))
+
+        for x, y in self.coordinates:
+            self.grid_logic.cell_coordinates[y][x] = 0
+
+        self.coordinates = new_coords
+
+        for x, y in self.coordinates:
+            self.grid_logic.cell_coordinates[y][x] = 1
+
+
+    def __debug(self, piece_name: str, string: str) -> None:
+        piece_name = piece_name.upper()
+        if self.piece_shape == piece_name:
+            print(string)
+
 if __name__ == "__main__":
       pass
+
