@@ -58,20 +58,20 @@ class TetrisNGramAI:
 
 
 if __name__ == "__main__":
-    ai = TetrisNGramAI(n=2)
-    ai.load_corpus()
-    ai.show_ngrams()
+    model = TetrisNGramAI(n=2)
+    model.load_corpus()
+    model.show_ngrams()
 
     # Example prediction using last piece
-    if len(ai.history_sequence) >= 1:
-        last_piece = ai.history_sequence[-1:]
-        prediction = ai.predict_next_piece(last_piece)
+    if len(model.history_sequence) >= 1:
+        last_piece = model.history_sequence[-1:]
+        prediction = model.predict_next_piece(last_piece)
         print(f"\nPrediction after last piece {last_piece}: {prediction}")
 
     # Example prediction using last two pieces for trigram
-    if len(ai.history_sequence) >= 2:
-        ai_trigram = TetrisNGramAI(n=3)
-        ai_trigram.load_corpus()
-        last_two = ai_trigram.history_sequence[-2:]
-        prediction_tri = ai_trigram.predict_next_piece(last_two)
+    if len(model.history_sequence) >= 2:
+        model_trigram = TetrisNGramAI(n=3)
+        model_trigram.load_corpus()
+        last_two = model_trigram.history_sequence[-2:]
+        prediction_tri = model_trigram.predict_next_piece(last_two)
         print(f"\nPrediction after last two pieces {last_two}: {prediction_tri}")
