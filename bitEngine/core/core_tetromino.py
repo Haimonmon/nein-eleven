@@ -87,7 +87,7 @@ class BitLogicTetromino:
             self.coordinates = new_coordinates
 
         for x, y in self.coordinates:
-            self.grid_logic.cell_coordinates[y][x] = 1
+            self.grid_logic.cell_coordinates[y][x] = self.piece_shape
 
 
     def update(self) -> None:

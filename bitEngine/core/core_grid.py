@@ -1,4 +1,7 @@
 import random
+import os
+import copy
+import json
 
 from typing import Literal, Dict, List, Tuple, Type
 
@@ -68,6 +71,15 @@ class BitLogicTetrominoGridSpawner:
     def update(self) -> None:
         # * Spawn once only for testing
         if not self.spawned_tetromino or self.spawned_tetromino.landed:
+            if self.spawned_tetromino:
+            # Write pattern for the landed piece
+                self.write_pattern(
+                pieces=[self.spawned_tetromino],  
+                board=self.grid_logic.get_board_state(),
+                save_path="pattern.json"
+            )
+
+            # Spawn the next piece
             self.spawn(self.next_piece_logic.get_piece())
             self.spawned_tetromino.indicator = True
 
@@ -100,12 +112,49 @@ class BitLogicTetrominoGridSpawner:
         
         # * Position Tetromino on the grid
         for x, y in tetromino_coordinates:
-            self.grid_logic.cell_coordinates[y][x] = 1
+            self.grid_logic.cell_coordinates[y][x] = piece_shape
 
         created_tetromino.coordinates = tetromino_coordinates
 
         self.spawned_tetromino = created_tetromino
-        
+
+
+    def format_board(self,board):
+        return ["[" + ",".join(str(c) for c in row) + "]" for row in board]
+
+    def write_pattern(self, board, pieces, save_path="pattern.json"):
+        board_copy = copy.deepcopy(board)
+
+        for tetro in pieces:
+            if tetro.landed:
+                for x, y in tetro.coordinates:
+                    board_copy[y][x] = tetro.piece_shape
+
+        pattern_data = []
+        for tetro in pieces:
+            entry = {
+                "piece": tetro.piece_shape,
+                "landed_coordinates": tetro.coordinates,
+                "board": self.format_board(board_copy),   # <── formatted
+                "chosen_position": [tetro.coordinates[0][0], "default"]
+            }
+            pattern_data.append(entry)
+
+        if os.path.exists(save_path):
+            with open(save_path, "r") as f:
+                try:
+                    existing = json.load(f)
+                except json.JSONDecodeError:
+                    existing = []
+        else:
+            existing = []
+
+        existing.extend(pattern_data)
+
+        with open(save_path, "w") as f:
+            json.dump(existing, f, indent=2)
+
+        return pattern_data
 
     def create(self, piece_shape: Literal["0", "I"]) -> BitLogicTetromino:
         """ Creates the tetromino peice coordinates or its piece shape """
