@@ -14,3 +14,9 @@ class Tetra:
 if __name__ == "__main__":
     tetris = Tetra()
     tetris.start()
+
+""" 
+TODO:
+? 1. Fix Shift Down
+
+"""
