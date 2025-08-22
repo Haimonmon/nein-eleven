@@ -52,4 +52,5 @@ if __name__ == "__main__":
       piece_view.update()
       print(piece_view.get_piece())
       piece_view.update()
+      print(piece_view.peek_next())
    
