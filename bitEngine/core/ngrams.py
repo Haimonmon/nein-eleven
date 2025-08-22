@@ -1,126 +1,114 @@
+import json
 import os
 from collections import Counter
 
 
-class NGrams:
-    def __init__(self, max_n=3):
+class TetrisNGramAI:
+    def __init__(self, corpus_file="bitEngine/data/training_data/pattern1.json", n=2):
         """
-        max_n = highest order of n-grams to compute.
-        Default = 3 (unigram, bigram, trigram).
+        n: size of N-gram (2 for bigram, 3 for trigram, etc.)
         """
-        self.max_n = max_n
-        self.ngram_counts = {n: Counter() for n in range(1, max_n + 1)}
-        self.total_counts = {n: 0 for n in range(1, max_n + 1)}
+        self.corpus_file = corpus_file
+        self.n = n
+        self.ngram_counts = Counter()
+        self.history_sequence = []
 
-    def process(self, file_path="BitEngine/data/sentences/eng_sentences.txt"):
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"{file_path} does not exist.")
+    def load_corpus(self):
+        if not os.path.exists(self.corpus_file):
+            print("⚠️ No corpus file found.")
+            return
 
-        with open(file_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
+        with open(self.corpus_file, "r") as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                print("⚠️ Invalid JSON in pattern.json")
+                return
 
-                # normalize case
-                tokens = ["<s>"] + line.lower().split() + ["<s/>"]
+        # Extract sequence of current_piece only
+        self.history_sequence = [entry["piece"] for entry in data]
 
-                # Generate n-grams up to max_n
-                for n in range(1, self.max_n + 1):
-                    for i in range(len(tokens) - n + 1):
-                        ngram = tuple(tokens[i:i + n])
-                        self.ngram_counts[n][ngram] += 1
+        # Build n-grams from sequence
+        for i in range(len(self.history_sequence) - self.n + 1):
+            ngram = tuple(self.history_sequence[i:i+self.n])
+            self.ngram_counts[ngram] += 1
 
-        # Save totals
-        for n in range(1, self.max_n + 1):
-            self.total_counts[n] = sum(self.ngram_counts[n].values())
-
-    def count_occurrences(self, phrase: str):
+    def predict_next_piece(self, last_pieces):
         """
-        Count how many times the given phrase appears in the corpus.
-        Works for any n <= max_n.
+        last_pieces: list of last (n-1) pieces
+        Returns: list of next piece candidates sorted by frequency
         """
-        words = tuple(phrase.lower().split())
-        n = len(words)
+        if len(last_pieces) != self.n - 1:
+            raise ValueError(f"Provide exactly {self.n - 1} last pieces")
 
-        if n > self.max_n:
-            raise ValueError(f"Only up to {self.max_n}-grams are supported.")
+        candidates = Counter()
+        for ngram, count in self.ngram_counts.items():
+            if ngram[:-1] == tuple(last_pieces):
+                candidates[ngram[-1]] = count
 
-        return self.ngram_counts[n][words]
-
-
-    def next_possible_words(self, phrase: str):
-        """
-        Suggest next words using automatic backoff:
-        Start from highest n-gram available for context,
-        and fallback until we find candidates.
-        """
-        words = phrase.lower().split()
-        candidates = []
-
-        # Start from highest order (max_n)
-        for n in range(self.max_n, 0, -1):
-            if len(words) >= n - 1:
-                context = tuple(words[-(n - 1):]) if n > 1 else ()
-
-                # Collect candidates
-                candidates = [
-                    (ngram[-1], count)
-                    for ngram, count in self.ngram_counts[n].items()
-                    if ngram[:-1] == context
-                ]
-
-                if candidates:
-                    break
-
-        # If still nothing, return most common unigrams
         if not candidates:
-            candidates = list(self.ngram_counts[1].items())
+            return []
 
-        # Sort by frequency
-        candidates.sort(key=lambda x: x[1], reverse=True)
+        # Sort by frequency descending
+        return [piece for piece, _ in candidates.most_common()]
 
-        # Compute probabilities
-        total = sum(c for _, c in candidates)
-        candidates_with_prob = [(word, count, count / total)
-                                for word, count in candidates]
-
-        return candidates_with_prob, total
+    def show_ngrams(self, top=5):
+        print(f"Top {top} {self.n}-grams:")
+        for ngram, count in self.ngram_counts.most_common(top):
+            print(f"  {ngram} -> {count} times")
 
 
-# === DEBUG MODE ===
 if __name__ == "__main__":
-    model = NGrams(max_n=4)
-    try:
-        model.process()
-        query = input("Enter a word/phrase to analyze: ").strip()
+    model = TetrisNGramAI(n=2)
+    model.load_corpus()
+    model.show_ngrams()
 
-        # Count
-        count = model.count_occurrences(query)
-        print(f"\n'{query}' appears {count} times in the corpus.")
+    # Example prediction using last piece
+    if len(model.history_sequence) >= 1:
+        last_piece = model.history_sequence[-1:]
+        prediction = model.predict_next_piece(last_piece)
+        print(f"\nPrediction after last piece {last_piece}: {prediction}")
 
-        # Next word prediction
-        next_words, total = model.next_possible_words(query)
-        if next_words:
-            print(f"\nNext possible words after '{query}' "
-                  f"(showing top {len(next_words)} options, total {total} appearances):")
-            for word, freq, prob in next_words:
-                print(f"  {word:10} ({freq} times, {prob*100:.2f}%)")
-        else:
-            print("\nNo continuation found in corpus.")
+    # Example prediction using last two pieces for trigram
+    if len(model.history_sequence) >= 2:
+        model_trigram = TetrisNGramAI(n=3)
+        model_trigram.load_corpus()
+        last_two = model_trigram.history_sequence[-2:]
+        prediction_tri = model_trigram.predict_next_piece(last_two)
+        print(
+            f"\nPrediction after last two pieces {last_two}: {prediction_tri}")
 
-    except FileNotFoundError as e:
-        print(f"Error: {e}")
+    """
+    TODO:
+    1. the functions like write_pattern(), format_board() should be in this class, for readability
 
+    2. fix format of the landed_coordinates on pattern.json
 
-"""
-TODO:
-* 1. Spell Casing needs some improvements
+    3. apply pickle, this is very helpful for large datasets like our pattern base
 
-* 2. Since trigrams is the max for now, can you try put 4 grams?, or any num of grams?, support for any type of grams? (OPTIONAL TASK)
+    4. possible pattern can be overwritten, make a conditional where if a pattern already existed, it will stop to save on pattern.json
 
-* 3. Create backoff method
+    5. Single player hint or suggestion
 
-4. on utils folder, theres a pickle_file.py there, apply pickle on our ngrams, modified the class there for pickle implementation
-   the pickle data is stored on data\pickles\ folder 
-"""
+    6. For file usage you can use utils, if its not enough, create a class for it, commonly in utils are file handlings
+
+    7. pattern json files should be save on data\training_data, pickle files should be save on data\pickles
+
+    8. DATA FIELD ADDITION: on the chosen_position, the second value should store, default if no rotation happen, if so, store the designated rotation, "clock_wise" or
+       "counter_clock_wise", this can be seen on core_controller.py
+
+    9. DATA FIELD ADDITION: lines_clear, this will store how many lines it cleared on that pattern
+
+    10. DATA FIELD ADDITION: next_pieces_queue , the pattern should know the pieces in queue, this can be seen on
+        core_next_piece_view.py
+
+    11. For debug or testing purposes, make a function that can recieve a board_state (Can be pass with your own board state),
+        then insert_piece params will recieve a piece name or shape, example: "T", "L",
+        then ai will decide to where to put the insert_piece bace on the given board_state
+
+    12. DATA FIELD ADDITION: steps, basically just a timestamp for your moves.
+
+    
+    NOTE:
+    1. hint or suggestion should prioritize first
+    """
