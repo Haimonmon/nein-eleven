@@ -32,17 +32,16 @@ class Bit:
 
         self.num_controllers = 0
 
-
-    def create_window(self, height: int = 740, width: int = 1200, title: str  = "The Bit Engine", icon: str = "favicon.png", background_color: str | Tuple[int] = "#1A1A1A") -> BitInterfaceWindow:
+    def create_window(self, height: int = 740, width: int = 1200, title: str = "The Bit Engine", icon: str = "favicon.png", background_color: str | Tuple[int] = "#1A1A1A", scanline_alpha: int = 70, bend_amount: float = 0.85, flicker_intensity: int = 20, crt_effect: bool = False) -> BitInterfaceWindow:
         """ Creates a tetris window """
 
-        self.window = BitInterfaceWindow(height, width, title, icon, background_color)
+        self.window = BitInterfaceWindow(height, width, title, icon, background_color, scanline_alpha, bend_amount, flicker_intensity, crt_effect)
 
         return self.window
 
 
     @require_window
-    def create_piece_viewer(self,width: int, height: int,  max_piece_queue: int = 3, cell_size: int = 30, position_x: int = 0, position_y: int = 0, border_color: str | set = "blue", border_thickness: int = 1, num_piece_display: int = 1) -> BitLogicNextPiece:
+    def create_piece_viewer(self, width: int, height: int,  max_piece_queue: int = 3, cell_size: int = 30, position_x: int = 0, position_y: int = 0, border_color: str | set = "blue", border_thickness: int = 1, num_piece_display: int = 1) -> Dict[str, object]:
         """ Creates a tetris next piece viewer """
         piece_view_logic: BitLogicNextPiece = BitLogicNextPiece(max_piece_queue)
         piece_view_interface: BitInterfaceNextPieceView = BitInterfaceNextPieceView(self.window, piece_view_logic, width, height, cell_size, position_x, position_y, border_color, border_thickness, num_piece_display)
@@ -74,6 +73,21 @@ class Bit:
             "grid_interface": grid_interface
         }
     
+
+    @require_window
+    def create_scoreboard(self, grid_line_cleaner: BitLogicLineCleaner, width: int, height: int, position_x: int = 0, position_y: int = 0, border_color: str | Tuple[int] = "blue", border_thickness: int = 1) -> Dict[str, object]:
+        """ Creates tetris scoreboard """
+        scoreboard_logic: BitLogicScoreboard = BitLogicScoreboard(grid_line_cleaner)
+        scoreboard_interface: BitInterfaceScoreBoard = BitInterfaceScoreBoard(self.window, scoreboard_logic ,width, height, position_x, position_y, border_color, border_thickness)
+
+        self.window.add_object(scoreboard_logic)
+        self.window.add_object(scoreboard_interface)
+
+        return {
+            "scoreboard_logic": scoreboard_logic,
+            "scoreboard_interface": scoreboard_interface
+        }
+
 
     @require_window
     def add_controller(self, object: object) -> None:
