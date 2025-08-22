@@ -2,7 +2,7 @@ from .core import *
 from .ui import *
 from .utils import *
 
-from typing import Tuple, Callable
+from typing import Tuple, Callable, Dict
 
 class BruhTheresNoWindows(Exception):
     """ Raised when the window object is missing. """
@@ -42,17 +42,37 @@ class Bit:
 
 
     @require_window
-    def create_grid(self, rows: int = 20, columns: int = 30, cell_size: int = 30, display_grid: bool = True, border_color: str | Tuple[int] = (100, 100, 100), border_width: int = 1) -> None:
+    def create_piece_viewer(self, max_piece_queue: int = 3, position_x: int = 0, position_y: int = 0) -> BitLogicNextPiece:
+        """ Creates a tetris next piece viewer """
+        piece_view_logic: BitLogicNextPiece = BitLogicNextPiece(max_piece_queue)
+        piece_view_interface: BitInterfaceNextPieceView = BitInterfaceNextPieceView()
+
+        self.window.add_object(piece_view_logic)
+        self.window.add_object(piece_view_interface)
+
+        return {
+            "piece_view_logic": piece_view_logic,
+            "piece_view_interface": piece_view_interface
+        }
+
+
+    @require_window
+    def create_grid(self,piece_view: BitLogicNextPiece = None, rows: int = 20, columns: int = 30, cell_size: int = 30, display_grid: bool = True, border_color: str | Tuple[int] = (100, 100, 100), border_width: int = 1, position_x: int = 0, position_y: int = 0) -> Dict[str, object]:
         """ Creates a tetris board or grid """
       
-        grid_logic = self.window.add_object(BitLogicGrid(self.window, rows, columns))
-        grid_spawner = self.window.add_object(BitLogicTetrominoGridSpawner(self.window, grid_logic, self.tick_speed)) 
+        grid_logic: BitLogicGrid = self.window.add_object(BitLogicGrid(self.window, rows, columns))
+        grid_spawner: BitLogicTetrominoGridSpawner = self.window.add_object(BitLogicTetrominoGridSpawner(self.window, grid_logic, piece_view, self.tick_speed)) 
 
-        self.window.add_object(BitLogicLineCleaner(self.window, grid_logic, grid_logic.rows))
+        line_cleaner: BitLogicLineCleaner = self.window.add_object(BitLogicLineCleaner(self.window, grid_logic, grid_logic.rows))
 
-        self.window.add_object(BitInterfaceGrid(grid_logic, cell_size, display_grid, border_color, border_width))
+        grid_interface: BitInterfaceGrid = self.window.add_object(BitInterfaceGrid(grid_logic, cell_size, display_grid, border_color, border_width, position_x, position_y))
 
-        return grid_spawner
+        return {
+            "grid_logic": grid_logic,
+            "grid_spawner": grid_spawner,
+            "grid_line_cleaner": line_cleaner,
+            "grid_interface": grid_interface
+        }
     
 
     @require_window
