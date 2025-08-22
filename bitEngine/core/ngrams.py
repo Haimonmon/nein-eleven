@@ -3,11 +3,14 @@ from collections import Counter
 
 
 class NGrams:
-    def __init__(self):
-        self.unigram_counts = Counter()
-        self.bigram_counts = Counter()
-        self.trigram_counts = Counter()
-        self.total_unigrams = 0
+    def __init__(self, max_n=3):
+        """
+        max_n = highest order of n-grams to compute.
+        Default = 3 (unigram, bigram, trigram).
+        """
+        self.max_n = max_n
+        self.ngram_counts = {n: Counter() for n in range(1, max_n + 1)}
+        self.total_counts = {n: 0 for n in range(1, max_n + 1)}
 
     def process(self, file_path="BitEngine/data/sentences/eng_sentences.txt"):
         if not os.path.exists(file_path):
@@ -19,77 +22,75 @@ class NGrams:
                 if not line:
                     continue
 
-                tokens = ["<s>"] + line.split() + ["<s/>"]
+                # normalize case
+                tokens = ["<s>"] + line.lower().split() + ["<s/>"]
 
-                # Unigrams
-                self.unigram_counts.update(tokens)
+                # Generate n-grams up to max_n
+                for n in range(1, self.max_n + 1):
+                    for i in range(len(tokens) - n + 1):
+                        ngram = tuple(tokens[i:i + n])
+                        self.ngram_counts[n][ngram] += 1
 
-                # Bigrams
-                bigrams = zip(tokens[:-1], tokens[1:])
-                self.bigram_counts.update(bigrams)
-
-                # Trigrams
-                trigrams = zip(tokens[:-2], tokens[1:-1], tokens[2:])
-                self.trigram_counts.update(trigrams)
-
-        self.total_unigrams = sum(self.unigram_counts.values())
+        # Save totals
+        for n in range(1, self.max_n + 1):
+            self.total_counts[n] = sum(self.ngram_counts[n].values())
 
     def count_occurrences(self, phrase: str):
         """
         Count how many times the given phrase appears in the corpus.
-        Works for unigram, bigram, and trigram.
+        Works for any n <= max_n.
         """
-        words = phrase.split()
+        words = tuple(phrase.lower().split())
+        n = len(words)
 
-        if len(words) == 1:
-            return self.unigram_counts[words[0]]
+        if n > self.max_n:
+            raise ValueError(f"Only up to {self.max_n}-grams are supported.")
 
-        elif len(words) == 2:
-            return self.bigram_counts[tuple(words)]
+        return self.ngram_counts[n][words]
 
-        elif len(words) == 3:
-            return self.trigram_counts[tuple(words)]
-
-        else:
-            raise ValueError(
-                "Only unigram, bigram, and trigram counts are supported.")
 
     def next_possible_words(self, phrase: str):
         """
-        Suggest ALL possible next words based on the corpus.
+        Suggest next words using automatic backoff:
+        Start from highest n-gram available for context,
+        and fallback until we find candidates.
         """
-        words = phrase.split()
+        words = phrase.lower().split()
+        candidates = []
 
-        if len(words) == 1:
-            w1 = words[0]
-            # Look for bigrams (w1, next)
-            candidates = [(w2, c)
-                          for (x, w2), c in self.bigram_counts.items() if x == w1]
+        # Start from highest order (max_n)
+        for n in range(self.max_n, 0, -1):
+            if len(words) >= n - 1:
+                context = tuple(words[-(n - 1):]) if n > 1 else ()
 
-        elif len(words) == 2:
-            w1, w2 = words
-            # Look for trigrams (w1, w2, next)
-            candidates = [(w3, c) for (
-                x, y, w3), c in self.trigram_counts.items() if x == w1 and y == w2]
+                # Collect candidates
+                candidates = [
+                    (ngram[-1], count)
+                    for ngram, count in self.ngram_counts[n].items()
+                    if ngram[:-1] == context
+                ]
 
-        elif len(words) == 3:
-            # Use the last two words as context
-            w2, w3 = words[-2], words[-1]
-            candidates = [(w4, c) for (
-                x, y, w4), c in self.trigram_counts.items() if x == w2 and y == w3]
+                if candidates:
+                    break
 
-        else:
-            raise ValueError(
-                "Only unigram, bigram, and trigram contexts are supported.")
+        # If still nothing, return most common unigrams
+        if not candidates:
+            candidates = list(self.ngram_counts[1].items())
 
-        # Sort candidates by frequency (highest first)
+        # Sort by frequency
         candidates.sort(key=lambda x: x[1], reverse=True)
-        return candidates
+
+        # Compute probabilities
+        total = sum(c for _, c in candidates)
+        candidates_with_prob = [(word, count, count / total)
+                                for word, count in candidates]
+
+        return candidates_with_prob, total
 
 
 # === DEBUG MODE ===
 if __name__ == "__main__":
-    model = NGrams()
+    model = NGrams(max_n=4)
     try:
         model.process()
         query = input("Enter a word/phrase to analyze: ").strip()
@@ -99,25 +100,26 @@ if __name__ == "__main__":
         print(f"\n'{query}' appears {count} times in the corpus.")
 
         # Next word prediction
-        next_words = model.next_possible_words(query)
+        next_words, total = model.next_possible_words(query)
         if next_words:
-            total = sum(freq for _, freq in next_words)
-            print(f"\nNext possible words after '{query}' ")
-            for word, freq in next_words:
-                print(f"  {word:10} ({freq} times)")
+            print(f"\nNext possible words after '{query}' "
+                  f"(showing top {len(next_words)} options, total {total} appearances):")
+            for word, freq, prob in next_words:
+                print(f"  {word:10} ({freq} times, {prob*100:.2f}%)")
         else:
             print("\nNo continuation found in corpus.")
 
     except FileNotFoundError as e:
         print(f"Error: {e}")
 
+
 """
 TODO:
-1. Spell Casing needs some improvements
+* 1. Spell Casing needs some improvements
 
-2. Since trigrams is the max for now, can you try put 4 grams?, or any num of grams?, support for any type of grams? (OPTIONAL TASK)
+* 2. Since trigrams is the max for now, can you try put 4 grams?, or any num of grams?, support for any type of grams? (OPTIONAL TASK)
 
-3. Create backoff method
+* 3. Create backoff method
 
 4. on utils folder, theres a pickle_file.py there, apply pickle on our ngrams, modified the class there for pickle implementation
    the pickle data is stored on data\pickles\ folder 
