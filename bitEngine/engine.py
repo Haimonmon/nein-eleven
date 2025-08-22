@@ -42,10 +42,10 @@ class Bit:
 
 
     @require_window
-    def create_piece_viewer(self, max_piece_queue: int = 3, position_x: int = 0, position_y: int = 0) -> BitLogicNextPiece:
+    def create_piece_viewer(self,width: int, height: int,  max_piece_queue: int = 3, cell_size: int = 30, position_x: int = 0, position_y: int = 0, border_color: str | set = "blue", border_thickness: int = 1, num_piece_display: int = 1) -> BitLogicNextPiece:
         """ Creates a tetris next piece viewer """
         piece_view_logic: BitLogicNextPiece = BitLogicNextPiece(max_piece_queue)
-        piece_view_interface: BitInterfaceNextPieceView = BitInterfaceNextPieceView(piece_view_logic)
+        piece_view_interface: BitInterfaceNextPieceView = BitInterfaceNextPieceView(self.window, piece_view_logic, width, height, cell_size, position_x, position_y, border_color, border_thickness, num_piece_display)
 
         self.window.add_object(piece_view_logic)
         self.window.add_object(piece_view_interface)
