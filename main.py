@@ -5,7 +5,7 @@ class Tetra:
     """ Welcome to Tetra game """
     def __init__(self):
         self.engine = bitEngine.Bit()
-        self.window = self.engine.create_window()
+        self.window = self.engine.create_window(crt_effect = True)
         self.main_game = pages.MainGame(self)
 
     def start(self) -> None:
