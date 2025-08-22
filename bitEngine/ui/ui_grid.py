@@ -3,7 +3,7 @@ from typing import Set, Any
 
 class BitInterfaceGrid:
     """ Renders a grid or tetris board interface """
-    def __init__(self, grid_logic, cell_size: int = 30, display_grid: bool = False, border_color: Set[int] = (100, 100, 100), border_width: int = 1) -> None:
+    def __init__(self, grid_logic, cell_size: int = 30, display_grid: bool = False, border_color: Set[int] = (100, 100, 100), border_width: int = 1, position_x: int = 0, position_y: int = 0) -> None:
         """ Tetris board """
         # * internal logics
         self.grid_logic = grid_logic
@@ -15,6 +15,9 @@ class BitInterfaceGrid:
         self.border_width = border_width
 
         self.cell_coordinates = []
+
+        self.position_x = position_x
+        self.position_y = position_y
 
         self.board_width = 0
         self.board_height = 0
@@ -31,13 +34,17 @@ class BitInterfaceGrid:
     def draw_board(self, screen: pygame.Surface) -> None:
         """ Draws tetromino board """
 
-        windows_width, windows_height = screen.get_size()
-
         self.board_width: int = self.grid_logic.columns * self.cell_size
         self.board_height: int = self.grid_logic.rows * self.cell_size
+        
+        self.offset_x: int = self.position_x
+        self.offset_y: int = self.position_y
 
-        self.offset_x: int = (windows_width - self.board_width) // 2
-        self.offset_y: int = (windows_height - self.board_height) // 2
+        # self.offset_x: int = (windows_width - self.board_width) // 2
+        # self.offset_y: int = (windows_height - self.board_height) // 2
+
+        self.grid_logic.offset_x = self.offset_x
+        self.grid_logic.offset_y = self.offset_y
 
         self._get_cell_coordinates()
 
@@ -84,6 +91,7 @@ class BitInterfaceGrid:
 
     def _get_cell_coordinates(self) -> None: 
         """ Gets all cell coordinates storing set of x and y coordinates """
+        self.cell_coordinates.clear()
         for row in range(self.grid_logic.rows):
             for column in range(self.grid_logic.columns):
                 x = self.offset_x + column * self.cell_size
