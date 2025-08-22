@@ -7,8 +7,8 @@ class MainGame:
         self.engine: bitEngine.Bit = main.engine
 
         self.window = main.window
-        self.piece_viewer = self.engine.create_piece_viewer(2)
-        self.grid = self.engine.create_grid(piece_view = self.piece_viewer["piece_view_logic"], columns=10, rows=20, position_y = 70, position_x = 300, display_grid = True, border_color = "blue")
+        self.piece_viewer = self.engine.create_piece_viewer(width = 170, height = 300, position_x = 670, position_y = 370, num_piece_display = 2, border_color = "gold")
+        self.grid = self.engine.create_grid(piece_view = self.piece_viewer["piece_view_logic"], columns=10, rows=20, position_y = 70, position_x = 300, display_grid = False, border_color = "blue")
         self.controller = self.engine.add_controller(self.grid)
         
 
