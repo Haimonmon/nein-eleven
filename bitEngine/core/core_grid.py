@@ -3,9 +3,10 @@ import random
 from typing import Literal, Dict, List, Tuple, Type
 
 from .core_tetromino import BitLogicTetromino
-from .core_controller import BitLogicController
+from .core_next_piece_view import BitLogicNextPiece
 
 from bitEngine.ui import BitInterfaceTetromino
+
 
 class BitLogicGrid:
     """ Collision logics """
@@ -16,70 +17,60 @@ class BitLogicGrid:
         self.columns = columns
 
         self.cell_coordinates = [[0 for _ in range(columns)] for _ in range(rows)]
+        
+        self.offset_x = 0
+        self.offset_y = 0
 
+    
+    def get_board_state(self) -> List:
+        """ Returns the whole board state """
+        return self.cell_coordinates
+    
 
     def update(self) -> None:
         pass
-        # for row in self.cell_coordinates:
-        #     print(row)
 
 
 class BitLogicTetrominoGridSpawner:
     """ Basically just a spawner 🤓☝️"""
-    def __init__(self, window, grid_logic: BitLogicGrid, tick_speed: int = 500):
+    def __init__(self, window, grid_logic: BitLogicGrid, next_piece_logic: BitLogicNextPiece, tick_speed: int = 500):
         self.window = window 
 
         self.tick_speed = tick_speed
 
         self.grid_logic = grid_logic
+        
+        self.next_piece_logic: BitLogicNextPiece = next_piece_logic
+
         self.tetromino_logic = BitLogicTetromino
+
         self.tetromino_interface = BitInterfaceTetromino
+        self.tetromino_colors = "green"
+        self.tetromino_border_color = None
+        self.tetromino_indicator_color = "white"
 
         self.spawn_test = True
         self.spawn_num = 0
-
-        self.piece: Dict[str, List[Tuple[int, int]]] = {
-            "O": [(0, 0), (1, 0), (0, 1), (1, 1)],
-            "I": [(0, 0), (1, 0), (2, 0), (3, 0)],
-            "T": [(1, 0), (0, 1), (1, 1), (2, 1)],
-            "L": [(0, 0), (0, 1), (0, 2), (1, 2)],
-            "J": [(1, 0), (1, 1), (1, 2), (0, 2)],
-            "S": [(1, 0), (2, 0), (0, 1), (1, 1)],
-            "Z": [(0, 0), (1, 0), (1, 1), (2, 1)]
-        }
 
         self.spawned_tetromino = None
 
         self.controller = None
 
 
+    def change_tetromino_appearance(self, fill_colors: str | List[str], border_color: str | set = (0, 0, 0), indicator_color: str | set = "white") -> None:
+        """ Change tetromino colors """
+        self.tetromino_colors = fill_colors
+        self.tetromino_border_color = border_color
+        self.tetromino_indicator_color = indicator_color
+        return
+    
+
     def update(self) -> None:
         # * Spawn once only for testing
-        if self.spawn_test and self.spawn_num < 1:
-
-            self.spawn("I", x = 0, y = 19)
-            self.spawn("I", x = 4, y = 19)
-            self.spawn("I", x = 0, y = 18)
-            self.spawn("I", x = 4, y = 18)
-            self.spawn("I", x = 0, y = 17)
-            self.spawn("I", x = 4, y = 17)
-            self.spawn("I", x = 0, y = 16)
-            self.spawn("I", x = 4, y = 16)
-            self.spawn("I", x = 0, y = 15)
-            self.spawn("I", x = 4, y = 15)
-            
-            self.spawn("z", x = 8, y = 10)
-            self.spawned_tetromino.rotate("clock_wise")
-
-
-            self.spawn_num += 1
-
-
         if not self.spawned_tetromino or self.spawned_tetromino.landed:
-            self.spawn(piece_shape = random.choice(list(self.piece.keys())))
+            self.spawn(self.next_piece_logic.get_piece())
+            self.spawned_tetromino.indicator = True
 
-        
-        
 
     def spawn(self, piece_shape: Literal["O", "I", "T", "L", "J", "S", "Z"] = "O", x: int = None, y: int = None) -> None:
         """ spawns tetromino pieces on the grid """
@@ -119,13 +110,19 @@ class BitLogicTetrominoGridSpawner:
     def create(self, piece_shape: Literal["0", "I"]) -> BitLogicTetromino:
         """ Creates the tetromino peice coordinates or its piece shape """
 
-        coordinates = self.piece.get(piece_shape)
+        coordinates = self.next_piece_logic.piece.get(piece_shape)
 
         created_logic_tetromino: BitLogicTetromino = self.tetromino_logic(self.grid_logic, piece_shape, coordinates, self.tick_speed)
 
         # * ADDS TO THE WINDOW SURFACE
         self.window.add_object(created_logic_tetromino)
-        self.window.add_object(self.tetromino_interface(created_logic_tetromino))
+        tetromino_interface = self.tetromino_interface(created_logic_tetromino)
+
+        tetromino_interface.color = self.tetromino_colors
+        tetromino_interface.border_color = self.tetromino_border_color
+        tetromino_interface.indicator_color = self.tetromino_indicator_color
+
+        self.window.add_object(tetromino_interface)
 
         return created_logic_tetromino
 
@@ -177,5 +174,3 @@ class BitLogicLineCleaner:
         for tetro in self.tetrominoes:
             for (x, y) in tetro.coordinates:
                 self.grid_logic.cell_coordinates[y][x] = 1
-    
-    
