@@ -99,16 +99,5 @@ class BitInterfaceGrid:
                 self.cell_coordinates.append((x, y))
 
 
-class BitInterfaceGridScoreBoard:
-    """ Renders a grid scoreboard interface """
-    def __init__(self, height: int, width: int) -> None:
-        """ Tetris board scoreboard """
-        self.__height = height
-        self.__width = width
-    
-    def render() -> None:
-        pass
-
-
 if __name__ == "__main__":
       pass
