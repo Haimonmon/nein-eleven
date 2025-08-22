@@ -5,7 +5,6 @@ from typing import Set, List
 
 class BitInterfaceWindow:
     """ Bit Engine's Window """
-
     def __init__(self, height: int = 300, width: int = 600, title: str = "The Bit Engine", icon: str = "favicon.png", background_color: str | Set[int] = "#1A1A1A") -> None:
         self.height = height
         self.width = width
@@ -20,6 +19,7 @@ class BitInterfaceWindow:
         self.events = None
 
         self.game_objects = []
+
 
 
     def add_object(self, object: object) -> object:
