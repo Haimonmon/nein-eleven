@@ -45,7 +45,7 @@ class Bit:
     def create_piece_viewer(self, max_piece_queue: int = 3, position_x: int = 0, position_y: int = 0) -> BitLogicNextPiece:
         """ Creates a tetris next piece viewer """
         piece_view_logic: BitLogicNextPiece = BitLogicNextPiece(max_piece_queue)
-        piece_view_interface: BitInterfaceNextPieceView = BitInterfaceNextPieceView()
+        piece_view_interface: BitInterfaceNextPieceView = BitInterfaceNextPieceView(piece_view_logic)
 
         self.window.add_object(piece_view_logic)
         self.window.add_object(piece_view_interface)
