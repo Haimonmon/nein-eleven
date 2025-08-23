@@ -21,12 +21,16 @@ class BitLogicController:
         self.temporary_object = object
         self.controller_name = controller_name
 
+        self.rotation_index = 0
+
         self.object = None
 
 
     def control(self, events) -> None:
         # ? Temporary 
-        self.object = self.temporary_object["grid_spawner"].spawned_tetromino
+        grid_spawner_logic = self.temporary_object["grid_spawner"]
+        grid_spawner_logic.controller = self
+        self.object = grid_spawner_logic.spawned_tetromino
         self.apply_controls(events)
 
 
@@ -57,9 +61,11 @@ class BitLogicController:
                 if hasattr(self.object, "rotate"):
                     if event.key == pygame.K_x:
                         self.object.rotate("clock_wise")
-                    
+                        self.rotation_index = (self.rotation_index + 1) % 4
+                       
                     if event.key == pygame.K_z:
                         self.object.rotate("counter_clock_wise")
+                        self.rotation_index = (self.rotation_index - 1) % 4
 
 if __name__ == "__main__":
       pass
