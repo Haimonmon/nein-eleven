@@ -2,7 +2,7 @@ import sys
 import pygame
 import random
 
-from typing import Set, List
+from typing import Set, List, Callable
 
 class BitInterfaceWindow:
     """ Bit Engine's Window """
@@ -31,11 +31,23 @@ class BitInterfaceWindow:
         self.bend_amount = bend_amount
         self.flicker_intensity = flicker_intensity
 
+        self.page_manager = BitPageManager(self)
+
+       
+    def get_window_events(self) -> pygame.event:
+        """ Get's window events """
+        return self.events
+    
 
     def add_object(self, object: object) -> object:
         """ Make the object be part of the loop  """
         self.game_objects.append(object)
         return object
+    
+
+    def clear_objects(self) -> None:
+        """ Clears the entire game objects """
+        self.game_objects = []
     
 
     def get_objects(self, name: str = None) -> List[object]:
@@ -60,35 +72,43 @@ class BitInterfaceWindow:
                     print("Goodbye and Thanks")
 
             if self.crt_effect:
-                self.game_surface.fill(self.background_color)
+                target_surface = self.game_surface
             else:
-                self.screen.fill(self.background_color)
+                target_surface = self.screen
 
-            for object in self.game_objects:
+            target_surface.fill(self.background_color)
+
+            for game_object in self.game_objects:
                 # * For logic updates objects
-                if hasattr(object, "update"):
-                    object.update()
+                if hasattr(game_object, "update"):
+                    game_object.update()
 
-                # * For logic controller objects
-                if hasattr(object, "control"):
-                    object.control(self.events)
+                # * For logic controller game_objects
+                if hasattr(game_object, "control"):
+                    game_object.control(self.events)
                     
-                # * For interface renderings objects
-                if hasattr(object, "render"):
+                # * For interface renderings game_objects
+                if hasattr(game_object, "render"):
                     if self.crt_effect:
-                        object.render(self.game_surface)
+                        game_object.render(self.game_surface)
                     else:
-                        object.render(self.screen)
+                        game_object.render(self.screen)
 
+
+            # * FOR THE PAGE MANAGER
+            if self.page_manager.current_page:
+                self.page_manager.update()
+                self.page_manager.control(self.events)
+                self.page_manager.render(target_surface)
+
+             # * FOR THE CRT EFFECT
             if self.crt_effect:
                 crt_surface = self.apply_scanlines(self.game_surface.copy())
                 bent_surface = self.crt_bend_exaggerated(crt_surface)
                 final_surface = self.apply_flicker(bent_surface)
 
                 self.screen.blit(final_surface, (0, 0))
-            else:
-                self.screen.blit(self.screen, (0,0))
-
+            
             pygame.display.flip()
             # * Frame per Seconds
             clock.tick(120)
@@ -172,6 +192,76 @@ class BitInterfaceWindow:
         self.running = False
         pygame.quit()
         sys.exit()
+
+
+# * ============ DECORATORS ============
+
+def validate_page(func: Callable):
+    """ Decorator for window validation """
+
+    def wrapper(self, name: str, page: object, *args, **kwargs):
+        required_methods = ["render", "update", "control"]
+
+        for method in required_methods:
+            if not hasattr(page, method):
+                raise AttributeError(f"The page '{name}' must have a callable '{method}' method.")
+            
+        return func(self, name, page, *args, **kwargs)
+    return wrapper
+
+# * ====================================
+
+
+class BitPageManager:
+    """ Handles windows single page application """
+    def __init__(self, window):
+        self.window = window
+
+        # * PAGE HANDLING
+        self.pages = {}
+
+        self.current_page = None
+    
+
+    @validate_page
+    def add_page(self, name: str, page_class: object, *args, **kwargs) -> object:
+        """ Sotres the page on the app window """
+        self.pages[name] = (page_class, args, kwargs)
+        return name
+    
+
+    def set_page(self, name: str, *args, **kwargs) -> object:
+        """ Switch to a page, allowing extra params """
+        if name not in self.pages:
+            raise ValueError(f"Page '{name}' does not exist.")
+
+        self.window.clear_objects()
+
+        page_class, default_args, default_kwargs = self.pages[name]
+
+        # Merge defaults + new args
+        final_args = args if args else default_args
+        final_kwargs = {**default_kwargs, **kwargs}
+
+        # Create new page instance
+        self.current_page = page_class(*final_args, **final_kwargs)
+
+        return self.current_page
+
+
+    def update(self):
+        if self.current_page and hasattr(self.current_page, "update"):
+            self.current_page.update()
+
+
+    def render(self, surface: pygame.Surface, *args):
+        if self.current_page and hasattr(self.current_page, "render"):
+            self.current_page.render(surface, *args)
+
+
+    def control(self, events):
+        if self.current_page and hasattr(self.current_page, "control"):
+            self.current_page.control(events)
 
 
 if __name__ == "__main__":
