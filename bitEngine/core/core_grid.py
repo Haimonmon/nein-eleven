@@ -7,6 +7,7 @@ from typing import Literal, Dict, List, Tuple, Type
 
 from .core_tetromino import BitLogicTetromino
 from .core_next_piece_view import BitLogicNextPiece
+from .ngrams import PatternNGrams
 
 from bitEngine.ui import BitInterfaceTetromino
 
@@ -52,6 +53,8 @@ class BitLogicTetrominoGridSpawner:
         self.tetromino_border_color = None
         self.tetromino_indicator_color = "white"
 
+        self.predictor = PatternNGrams()
+
         self.spawn_test = True
         self.spawn_num = 0
 
@@ -89,33 +92,47 @@ class BitLogicTetrominoGridSpawner:
             
         piece_shape = piece_shape.upper()
         # * I want the tetromino to spawn within in any area of the spawn 🫡
+        predictor = getattr(self, "predictor", None)
+        print(f"[spawn] piece={piece_shape} | predictor attached? {'yes' if predictor else 'no'}")
+
+        # Create the tetromino normally
+        created_tetromino: BitLogicTetromino = self.create(piece_shape)
+
+        # Ask predictor where it *should* go
+        if self.predictor is not None:
+            try:
+                board_state = self.grid_logic.get_board_state()
+                suggestion = self.predictor.predict(
+                    board_state, 
+                    piece_shape,
+                    columns=self.grid_logic.columns,
+                    rows=self.grid_logic.rows
+                )
+                print(f"[spawn] predictor suggestion={suggestion}")
+
+                if suggestion:
+                    # save suggestion (do not overwrite real coords yet)
+                    created_tetromino.suggested_position = suggestion
+            except Exception as e:
+                print(f"[spawn] predictor error: {e}")
+
+        # Normal spawn logic (random x, top y=0)
         if x is None:
-            start_x = random.randint(0, self.grid_logic.columns)
+            start_x = random.randint(0, self.grid_logic.columns - created_tetromino.max_x - 1)
         else:
             start_x = x
-        
+
         if y is None:
             start_y = 0
         else:
             start_y = y
 
-        created_tetromino: BitLogicTetromino = self.create(piece_shape)
-
-        # * Solution for over exceeding of tetromino because of randint     
-        if start_x + created_tetromino.max_x >= self.grid_logic.columns:
-            start_x = self.grid_logic.columns - created_tetromino.max_x - 1
-
+        tetromino_coordinates = [(cx + start_x, cy + start_y) for cx, cy in created_tetromino.coordinates]
         
-        # * Change tetromino coordinates base on grid
-        tetromino_coordinates = [(x + start_x, y + start_y) for x, y in created_tetromino.coordinates]
-       
-        
-        # * Position Tetromino on the grid
-        for x, y in tetromino_coordinates:
-            self.grid_logic.cell_coordinates[y][x] = piece_shape
+        for gx, gy in tetromino_coordinates:
+            self.grid_logic.cell_coordinates[gy][gx] = piece_shape
 
         created_tetromino.coordinates = tetromino_coordinates
-
         self.spawned_tetromino = created_tetromino
 
 
@@ -135,7 +152,7 @@ class BitLogicTetrominoGridSpawner:
             entry = {
                 "piece": tetro.piece_shape,
                 "landed_coordinates": tetro.coordinates,
-                "board": self.format_board(board_copy),   # <── formatted
+                "board": self.format_board(board_copy),
                 "chosen_position": [tetro.coordinates[0][0], "default"]
             }
             pattern_data.append(entry)
