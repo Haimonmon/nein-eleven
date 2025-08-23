@@ -51,9 +51,9 @@ class BitInterfaceTetromino:
                 self.cell_size,
                 self.cell_size
             )
+
             pygame.draw.rect(temp_surface, color, rect)
 
-            # Blit tetromino
             screen.blit(temp_surface, (
                 self.tetromino_grid.offset_x + min_x * self.cell_size,
                 self.tetromino_grid.offset_y + min_y * self.cell_size
