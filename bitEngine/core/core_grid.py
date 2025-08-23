@@ -89,6 +89,7 @@ class BitLogicTetrominoGridSpawner:
                 self.predictor.write_pattern(
                     piece=piece,
                     landed_coords=landed_coords,
+                    board=self.grid_logic.cell_coordinates,
                     rotation=rotation,
                     lines_cleared=lines_cleared,
                     next_queue=next_queue,

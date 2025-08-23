@@ -62,31 +62,41 @@ class PatternNGrams:
             prev = cur
         self.last_piece_seen = prev
 
+    def format_board(self, board):
+        """Return board as proper 2D list (with piece letters instead of 0)."""
+        return [[c for c in row] for row in board]
+
     # --- Write Pattern ---
-    def write_pattern(self, piece, landed_coords, rotation=0, lines_cleared=0,
-                      next_queue=None, reason="manual"):
+    def write_pattern(self, piece, landed_coords, board, rotation=0, lines_cleared=0,
+                    next_queue=None, reason="manual"):
         """Write new pattern if not duplicate."""
         if next_queue is None:
             next_queue = []
 
         # Prevent duplicates
         for p in self.patterns:
-            if p["piece"] == piece and p["landed_coordinates"] == landed_coords and p["rotation"] == rotation:
+            if (
+                p["piece"] == piece
+                and p["landed_coordinates"] == landed_coords
+                and p["rotation"] == rotation
+            ):
                 return False
 
         entry = {
             "piece": piece,
             "landed_coordinates": landed_coords,
+            "board": self.format_board(board), 
             "rotation": rotation,
             "lines_cleared": lines_cleared,
             "next_pieces_queue": next_queue,
             "timestamp": datetime.now().isoformat(),
-            "reason": reason
+            "reason": reason,
         }
         self.patterns.append(entry)
         self._save()
         self._build_model(self.patterns)
         return True
+
 
     # --- Board Formatter (for saving states) ---
     def format_board(self, board):
