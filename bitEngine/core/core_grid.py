@@ -81,8 +81,7 @@ class BitLogicTetrominoGridSpawner:
                 piece = self.spawned_tetromino.piece_shape
                 rotation = self.controller.rotation_index
 
-                print(rotation)
-
+                
                 # count cleared lines
                 lines_cleared = 0
                 for y in range(self.grid_logic.rows):

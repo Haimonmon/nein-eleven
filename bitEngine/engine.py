@@ -109,6 +109,10 @@ class Bit:
          self.window.render()
          self.window.exit()
 
+    
+    def exit(self) -> None:
+        self.window.exit()
+
 
 if __name__ == "__main__":
         engine = Bit(tick_speed=-2)

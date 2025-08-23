@@ -4,6 +4,8 @@ import random
 
 from typing import Set, List, Callable
 
+pygame.init()
+
 class BitInterfaceWindow:
     """ Bit Engine's Window """
 
@@ -15,6 +17,7 @@ class BitInterfaceWindow:
         self.icon = f"./bitEngine/assets/{icon}"
 
         self.running = False
+        self.paused = False
 
         self.screen = None
 
@@ -33,7 +36,12 @@ class BitInterfaceWindow:
 
         self.page_manager = BitPageManager(self)
 
-       
+    
+    def get_size(self) -> tuple[int, int]:
+        """ Gets window dimension """
+        return self.width, self.height
+    
+
     def get_window_events(self) -> pygame.event:
         """ Get's window events """
         return self.events
@@ -62,6 +70,7 @@ class BitInterfaceWindow:
         pygame.font.init()
         clock = pygame.time.Clock()
         self.running = True
+        self.paused = False
 
         while self.running:
             self.events = pygame.event.get()
@@ -69,7 +78,6 @@ class BitInterfaceWindow:
             for event in self.events:
                 if event.type == pygame.QUIT:
                     self.running = False
-                    print("Goodbye and Thanks")
 
             if self.crt_effect:
                 target_surface = self.game_surface
@@ -77,22 +85,24 @@ class BitInterfaceWindow:
                 target_surface = self.screen
 
             target_surface.fill(self.background_color)
+            
+            # * UPDATES ONLY WHEN NOT PAUSED 🤓☝️
+            if not self.paused:
+                for game_object in self.game_objects:
+                    # * For logic updates objects
+                    if hasattr(game_object, "update"):
+                        game_object.update()
 
-            for game_object in self.game_objects:
-                # * For logic updates objects
-                if hasattr(game_object, "update"):
-                    game_object.update()
-
-                # * For logic controller game_objects
-                if hasattr(game_object, "control"):
-                    game_object.control(self.events)
-                    
-                # * For interface renderings game_objects
-                if hasattr(game_object, "render"):
-                    if self.crt_effect:
-                        game_object.render(self.game_surface)
-                    else:
-                        game_object.render(self.screen)
+                    # * For logic controller game_objects
+                    if hasattr(game_object, "control"):
+                        game_object.control(self.events)
+                        
+                    # * For interface renderings game_objects
+                    if hasattr(game_object, "render"):
+                        if self.crt_effect:
+                            game_object.render(self.game_surface)
+                        else:
+                            game_object.render(self.screen)
 
 
             # * FOR THE PAGE MANAGER
@@ -116,6 +126,7 @@ class BitInterfaceWindow:
 
     def render(self) -> None:
         """ Renders bit engine windows """
+        
         # * Window Screen
         self.screen = pygame.display.set_mode((self.width, self.height))
 
@@ -190,6 +201,7 @@ class BitInterfaceWindow:
     def exit(self) -> None:
         """ exit bit engine windows """
         self.running = False
+        print("Goodbye and Thanks!, much love from BitEngine <3")
         pygame.quit()
         sys.exit()
 
