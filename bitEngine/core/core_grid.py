@@ -39,27 +39,22 @@ class BitLogicTetrominoGridSpawner:
     """ Basically just a spawner 🤓☝️"""
     def __init__(self, window, grid_logic: BitLogicGrid, next_piece_logic: BitLogicNextPiece, tick_speed: int = 500):
         self.window = window 
-
         self.tick_speed = tick_speed
-
         self.grid_logic = grid_logic
-        
         self.next_piece_logic: BitLogicNextPiece = next_piece_logic
 
         self.tetromino_logic = BitLogicTetromino
-
         self.tetromino_interface = BitInterfaceTetromino
         self.tetromino_colors = "green"
         self.tetromino_border_color = None
         self.tetromino_indicator_color = "white"
 
+        # predictor handles write_pattern and predict
         self.predictor = PatternNGrams()
 
         self.spawn_test = True
         self.spawn_num = 0
-
         self.spawned_tetromino = None
-
         self.controller = None
 
 
@@ -72,15 +67,32 @@ class BitLogicTetrominoGridSpawner:
     
 
     def update(self) -> None:
-        # * Spawn once only for testing
+    # * Spawn once only for testing
         if not self.spawned_tetromino or self.spawned_tetromino.landed:
             if self.spawned_tetromino:
-            # Write pattern for the landed piece
-                self.write_pattern(
-                pieces=[self.spawned_tetromino],  
-                board=self.grid_logic.get_board_state(),
-                save_path="pattern.json"
-            )
+                # Use PatternNGrams' write_pattern instead of local one
+                landed_coords = self.spawned_tetromino.coordinates
+                piece = self.spawned_tetromino.piece_shape
+                rotation = getattr(self.spawned_tetromino, "rotation", 0)
+                
+                # count cleared lines
+                lines_cleared = 0
+                for y in range(self.grid_logic.rows):
+                    if all(self.grid_logic.cell_coordinates[y][x] != 0 
+                        for x in range(self.grid_logic.columns)):
+                        lines_cleared += 1
+
+                # get the next queue from next_piece_logic
+                next_queue = self.next_piece_logic.queue if hasattr(self.next_piece_logic, "queue") else []
+
+                self.predictor.write_pattern(
+                    piece=piece,
+                    landed_coords=landed_coords,
+                    rotation=rotation,
+                    lines_cleared=lines_cleared,
+                    next_queue=next_queue,
+                    reason="auto"
+                )
 
             # Spawn the next piece
             self.spawn(self.next_piece_logic.get_piece())
@@ -91,7 +103,6 @@ class BitLogicTetrominoGridSpawner:
         """ spawns tetromino pieces on the grid """
             
         piece_shape = piece_shape.upper()
-        # * I want the tetromino to spawn within in any area of the spawn 🫡
         predictor = getattr(self, "predictor", None)
         print(f"[spawn] piece={piece_shape} | predictor attached? {'yes' if predictor else 'no'}")
 
@@ -111,7 +122,6 @@ class BitLogicTetrominoGridSpawner:
                 print(f"[spawn] predictor suggestion={suggestion}")
 
                 if suggestion:
-                    # save suggestion (do not overwrite real coords yet)
                     created_tetromino.suggested_position = suggestion
             except Exception as e:
                 print(f"[spawn] predictor error: {e}")
@@ -136,48 +146,9 @@ class BitLogicTetrominoGridSpawner:
         self.spawned_tetromino = created_tetromino
 
 
-    def format_board(self,board):
-        return ["[" + ",".join(str(c) for c in row) + "]" for row in board]
-
-    def write_pattern(self, board, pieces, save_path="pattern.json"):
-        board_copy = copy.deepcopy(board)
-
-        for tetro in pieces:
-            if tetro.landed:
-                for x, y in tetro.coordinates:
-                    board_copy[y][x] = tetro.piece_shape
-
-        pattern_data = []
-        for tetro in pieces:
-            entry = {
-                "piece": tetro.piece_shape,
-                "landed_coordinates": tetro.coordinates,
-                "board": self.format_board(board_copy),
-                "chosen_position": [tetro.coordinates[0][0], "default"]
-            }
-            pattern_data.append(entry)
-
-        if os.path.exists(save_path):
-            with open(save_path, "r") as f:
-                try:
-                    existing = json.load(f)
-                except json.JSONDecodeError:
-                    existing = []
-        else:
-            existing = []
-
-        existing.extend(pattern_data)
-
-        with open(save_path, "w") as f:
-            json.dump(existing, f, indent=2)
-
-        return pattern_data
-
-    def create(self, piece_shape: Literal["0", "I"]) -> BitLogicTetromino:
-        """ Creates the tetromino peice coordinates or its piece shape """
-
+    def create(self, piece_shape: Literal["O", "I"]) -> BitLogicTetromino:
+        """ Creates the tetromino piece coordinates or its piece shape """
         coordinates = self.next_piece_logic.piece.get(piece_shape)
-
         created_logic_tetromino: BitLogicTetromino = self.tetromino_logic(self.grid_logic, piece_shape, coordinates, self.tick_speed)
 
         # * ADDS TO THE WINDOW SURFACE
