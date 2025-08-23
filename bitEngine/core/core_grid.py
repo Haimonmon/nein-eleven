@@ -8,6 +8,7 @@ from typing import Literal, Dict, List, Tuple, Type
 from .core_tetromino import BitLogicTetromino
 from .core_next_piece_view import BitLogicNextPiece
 from .ngrams import PatternNGrams
+from .core_controller import BitLogicController
 
 from bitEngine.ui import BitInterfaceTetromino
 
@@ -55,7 +56,7 @@ class BitLogicTetrominoGridSpawner:
         self.spawn_test = True
         self.spawn_num = 0
         self.spawned_tetromino = None
-        self.controller = None
+        self.controller = BitLogicController(object)
 
 
     def change_tetromino_appearance(self, fill_colors: str | List[str], border_color: str | set = (0, 0, 0), indicator_color: str | set = "white") -> None:
@@ -73,8 +74,8 @@ class BitLogicTetrominoGridSpawner:
                 # Use PatternNGrams' write_pattern instead of local one
                 landed_coords = self.spawned_tetromino.coordinates
                 piece = self.spawned_tetromino.piece_shape
-                rotation = getattr(self.spawned_tetromino, "rotation", 0)
-                
+                rotation = self.controller.rotation_index
+
                 # count cleared lines
                 lines_cleared = 0
                 for y in range(self.grid_logic.rows):

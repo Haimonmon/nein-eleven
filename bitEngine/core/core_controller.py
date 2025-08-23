@@ -22,6 +22,7 @@ class BitLogicController:
         self.controller_name = controller_name
 
         self.object = None
+        self.rotation_index = 0
 
 
     def control(self, events) -> None:
@@ -57,9 +58,12 @@ class BitLogicController:
                 if hasattr(self.object, "rotate"):
                     if event.key == pygame.K_x:
                         self.object.rotate("clock_wise")
+                        self.rotation_index = (self.rotation_index + 1) % 4
                     
                     if event.key == pygame.K_z:
                         self.object.rotate("counter_clock_wise")
+                        self.rotation_index = (self.rotation_index - 1) % 4
+
 
 if __name__ == "__main__":
       pass
