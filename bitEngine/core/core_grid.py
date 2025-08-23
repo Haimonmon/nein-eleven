@@ -83,7 +83,7 @@ class BitLogicTetrominoGridSpawner:
                         lines_cleared += 1
 
                 # get the next queue from next_piece_logic
-                next_queue = self.next_piece_logic.queue if hasattr(self.next_piece_logic, "queue") else []
+                next_queue = self.next_piece_logic.peek_next()
 
                 self.predictor.write_pattern(
                     piece=piece,
