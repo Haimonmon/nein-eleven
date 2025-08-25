@@ -28,7 +28,7 @@ class BitLogicController:
 
     def control(self, events) -> None:
         # ? Temporary 
-        grid_spawner_logic = self.temporary_object["grid_spawner"]
+        grid_spawner_logic = self.temporary_object
         grid_spawner_logic.controller = self
         self.object = grid_spawner_logic.spawned_tetromino
         self.apply_controls(events)

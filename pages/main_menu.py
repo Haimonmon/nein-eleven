@@ -61,6 +61,7 @@ class MainMeny:
                     elif option == "OPTIONS":
                         print("Options menu!")
 
+
     def render_main_menu(self, surface: pygame.Surface) -> None:
         """ Display main menu """
         surface.fill((0, 0, 0))
@@ -78,8 +79,7 @@ class MainMeny:
             color = self.selected_color if is_selected else self.text_color
             text_surface = self.option_font.render(option, True, color)
 
-            text_rect = text_surface.get_rect(
-                center=(screen_w // 2, start_y + i * button_spacing))
+            text_rect = text_surface.get_rect(center=(screen_w // 2, start_y + i * button_spacing))
             button_rect = text_rect.inflate(40, 20)
 
             border_col = self.selected_border_color if is_selected else self.border_color

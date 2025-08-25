@@ -1,9 +1,7 @@
 import pygame
 
 class BitInterfaceNextPieceView:
-    def __init__(self,window, next_piece_logic, width: int, height: int , cell_size: int = 30, position_x: int = 0, position_y: int = 0, border_color: str = "blue", border_thickness: int = 1,  num_piece_display: int = 1):
-        self.window = window
-
+    def __init__(self, next_piece_logic, width: int, height: int , cell_size: int = 30, position_x: int = 0, position_y: int = 0, border_color: str = "blue", border_thickness: int = 1,  num_piece_display: int = 1, background_color: str | set = None):
         self.next_piece_logic = next_piece_logic
 
         self.width = width
@@ -16,6 +14,7 @@ class BitInterfaceNextPieceView:
 
         self.border_color = border_color
         self.border_thickness = border_thickness
+        self.background_color = background_color
 
         self.num_piece_display = num_piece_display
 
@@ -32,10 +31,8 @@ class BitInterfaceNextPieceView:
             return
 
         # * Draw board
-        preview_width = self.width 
-        preview_height = self.height 
         pygame.draw.rect(
-            screen, self.window.background_color,
+            screen, self.background_color,
             (self.position_x, self.position_y, self.width, self.height)
         )
 

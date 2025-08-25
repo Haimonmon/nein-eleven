@@ -4338,5 +4338,1629 @@
     ],
     "timestamp": "2025-08-23T13:14:36.321359",
     "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        19,
+        18
+      ],
+      [
+        20,
+        18
+      ],
+      [
+        20,
+        19
+      ],
+      [
+        21,
+        19
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "S"
+    ],
+    "timestamp": "2025-08-24T14:02:44.777143",
+    "reason": "auto"
+  },
+  {
+    "piece": "S",
+    "landed_coordinates": [
+      [
+        2,
+        18
+      ],
+      [
+        3,
+        18
+      ],
+      [
+        1,
+        19
+      ],
+      [
+        2,
+        19
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "T"
+    ],
+    "timestamp": "2025-08-24T14:02:52.693790",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        7,
+        19
+      ],
+      [
+        8,
+        19
+      ],
+      [
+        9,
+        19
+      ],
+      [
+        9,
+        18
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "L"
+    ],
+    "timestamp": "2025-08-24T14:05:39.457573",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        5,
+        17
+      ],
+      [
+        5,
+        18
+      ],
+      [
+        5,
+        19
+      ],
+      [
+        6,
+        19
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "L"
+    ],
+    "timestamp": "2025-08-24T14:05:40.510614",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        3,
+        17
+      ],
+      [
+        3,
+        18
+      ],
+      [
+        3,
+        19
+      ],
+      [
+        4,
+        19
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "T"
+    ],
+    "timestamp": "2025-08-24T14:05:42.066823",
+    "reason": "auto"
+  },
+  {
+    "piece": "T",
+    "landed_coordinates": [
+      [
+        7,
+        17
+      ],
+      [
+        6,
+        18
+      ],
+      [
+        7,
+        18
+      ],
+      [
+        8,
+        18
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:05:43.347353",
+    "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        7,
+        16
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        9,
+        17
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:05:44.981770",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        7,
+        14
+      ],
+      [
+        8,
+        14
+      ],
+      [
+        7,
+        15
+      ],
+      [
+        8,
+        15
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:05:46.937098",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        7,
+        12
+      ],
+      [
+        8,
+        12
+      ],
+      [
+        7,
+        13
+      ],
+      [
+        8,
+        13
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:05:49.707136",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        7,
+        10
+      ],
+      [
+        8,
+        10
+      ],
+      [
+        7,
+        11
+      ],
+      [
+        8,
+        11
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "S"
+    ],
+    "timestamp": "2025-08-24T14:05:50.935606",
+    "reason": "auto"
+  },
+  {
+    "piece": "S",
+    "landed_coordinates": [
+      [
+        6,
+        16
+      ],
+      [
+        6,
+        17
+      ],
+      [
+        5,
+        15
+      ],
+      [
+        5,
+        16
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "T"
+    ],
+    "timestamp": "2025-08-24T14:05:52.650187",
+    "reason": "auto"
+  },
+  {
+    "piece": "T",
+    "landed_coordinates": [
+      [
+        5,
+        14
+      ],
+      [
+        6,
+        15
+      ],
+      [
+        6,
+        14
+      ],
+      [
+        6,
+        13
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:05:54.660623",
+    "reason": "auto"
+  },
+  {
+    "piece": "J",
+    "landed_coordinates": [
+      [
+        8,
+        7
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        9
+      ],
+      [
+        7,
+        9
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:06:01.170049",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        7,
+        8
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "S"
+    ],
+    "timestamp": "2025-08-24T14:06:04.857949",
+    "reason": "auto"
+  },
+  {
+    "piece": "S",
+    "landed_coordinates": [
+      [
+        1,
+        18
+      ],
+      [
+        1,
+        17
+      ],
+      [
+        2,
+        19
+      ],
+      [
+        2,
+        18
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 1,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:06:10.196881",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        0,
+        16
+      ],
+      [
+        1,
+        16
+      ],
+      [
+        0,
+        17
+      ],
+      [
+        1,
+        17
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:06:11.484623",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        7,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        7,
+        7
+      ],
+      [
+        8,
+        7
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "S"
+    ],
+    "timestamp": "2025-08-24T14:06:12.988017",
+    "reason": "auto"
+  },
+  {
+    "piece": "S",
+    "landed_coordinates": [
+      [
+        1,
+        15
+      ],
+      [
+        0,
+        15
+      ],
+      [
+        2,
+        14
+      ],
+      [
+        1,
+        14
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:06:17.580924",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        1,
+        12
+      ],
+      [
+        2,
+        12
+      ],
+      [
+        1,
+        13
+      ],
+      [
+        2,
+        13
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "T"
+    ],
+    "timestamp": "2025-08-24T14:06:20.915309",
+    "reason": "auto"
+  },
+  {
+    "piece": "T",
+    "landed_coordinates": [
+      [
+        2,
+        16
+      ],
+      [
+        3,
+        17
+      ],
+      [
+        3,
+        16
+      ],
+      [
+        3,
+        15
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:06:27.386098",
+    "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        6,
+        12
+      ],
+      [
+        6,
+        13
+      ],
+      [
+        5,
+        13
+      ],
+      [
+        5,
+        14
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "L"
+    ],
+    "timestamp": "2025-08-24T14:06:32.082060",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        1,
+        9
+      ],
+      [
+        1,
+        10
+      ],
+      [
+        1,
+        11
+      ],
+      [
+        2,
+        11
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "S"
+    ],
+    "timestamp": "2025-08-24T14:06:34.093704",
+    "reason": "auto"
+  },
+  {
+    "piece": "S",
+    "landed_coordinates": [
+      [
+        4,
+        14
+      ],
+      [
+        4,
+        15
+      ],
+      [
+        3,
+        13
+      ],
+      [
+        3,
+        14
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:06:37.959869",
+    "reason": "auto"
+  },
+  {
+    "piece": "J",
+    "landed_coordinates": [
+      [
+        2,
+        10
+      ],
+      [
+        2,
+        9
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        3,
+        8
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "L"
+    ],
+    "timestamp": "2025-08-24T14:06:41.753256",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        7
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:06:45.122213",
+    "reason": "auto"
+  },
+  {
+    "piece": "J",
+    "landed_coordinates": [
+      [
+        8,
+        3
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        5
+      ],
+      [
+        7,
+        5
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:06:46.961719",
+    "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        5,
+        11
+      ],
+      [
+        5,
+        12
+      ],
+      [
+        4,
+        12
+      ],
+      [
+        4,
+        13
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "T"
+    ],
+    "timestamp": "2025-08-24T14:06:49.180840",
+    "reason": "auto"
+  },
+  {
+    "piece": "T",
+    "landed_coordinates": [
+      [
+        5,
+        10
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        4,
+        10
+      ],
+      [
+        4,
+        11
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "I"
+    ],
+    "timestamp": "2025-08-24T14:06:52.208894",
+    "reason": "auto"
+  },
+  {
+    "piece": "I",
+    "landed_coordinates": [
+      [
+        0,
+        11
+      ],
+      [
+        0,
+        12
+      ],
+      [
+        0,
+        13
+      ],
+      [
+        0,
+        14
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:06:54.776211",
+    "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        5,
+        8
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "L"
+    ],
+    "timestamp": "2025-08-24T14:06:58.084627",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        9,
+        2
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:06:58.857004",
+    "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        7,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "L"
+    ],
+    "timestamp": "2025-08-24T14:06:59.610593",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        4
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:07:01.820957",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        0,
+        15
+      ],
+      [
+        0,
+        16
+      ],
+      [
+        0,
+        17
+      ],
+      [
+        1,
+        17
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "S"
+    ],
+    "timestamp": "2025-08-24T14:08:49.587395",
+    "reason": "auto"
+  },
+  {
+    "piece": "S",
+    "landed_coordinates": [
+      [
+        7,
+        18
+      ],
+      [
+        8,
+        18
+      ],
+      [
+        6,
+        19
+      ],
+      [
+        7,
+        19
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:08:50.639985",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        7,
+        16
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        7,
+        17
+      ],
+      [
+        8,
+        17
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:08:51.656933",
+    "reason": "auto"
+  },
+  {
+    "piece": "J",
+    "landed_coordinates": [
+      [
+        5,
+        19
+      ],
+      [
+        4,
+        19
+      ],
+      [
+        3,
+        19
+      ],
+      [
+        3,
+        18
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:08:54.904266",
+    "reason": "auto"
+  },
+  {
+    "piece": "J",
+    "landed_coordinates": [
+      [
+        6,
+        16
+      ],
+      [
+        6,
+        17
+      ],
+      [
+        6,
+        18
+      ],
+      [
+        5,
+        18
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "T"
+    ],
+    "timestamp": "2025-08-24T14:08:56.086347",
+    "reason": "auto"
+  },
+  {
+    "piece": "T",
+    "landed_coordinates": [
+      [
+        4,
+        18
+      ],
+      [
+        5,
+        17
+      ],
+      [
+        4,
+        17
+      ],
+      [
+        3,
+        17
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:08:57.760748",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        4,
+        15
+      ],
+      [
+        5,
+        15
+      ],
+      [
+        4,
+        16
+      ],
+      [
+        5,
+        16
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:08:58.701523",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        6,
+        14
+      ],
+      [
+        7,
+        14
+      ],
+      [
+        6,
+        15
+      ],
+      [
+        7,
+        15
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:08:59.395733",
+    "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        6,
+        12
+      ],
+      [
+        6,
+        13
+      ],
+      [
+        5,
+        13
+      ],
+      [
+        5,
+        14
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:09:02.917630",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        8,
+        14
+      ],
+      [
+        9,
+        14
+      ],
+      [
+        8,
+        15
+      ],
+      [
+        9,
+        15
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:09:05.414250",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        7,
+        12
+      ],
+      [
+        8,
+        12
+      ],
+      [
+        7,
+        13
+      ],
+      [
+        8,
+        13
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "I"
+    ],
+    "timestamp": "2025-08-24T14:09:06.258435",
+    "reason": "auto"
+  },
+  {
+    "piece": "I",
+    "landed_coordinates": [
+      [
+        2,
+        16
+      ],
+      [
+        2,
+        17
+      ],
+      [
+        2,
+        18
+      ],
+      [
+        2,
+        19
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 3,
+    "next_pieces_queue": [
+      "I"
+    ],
+    "timestamp": "2025-08-24T14:09:08.270501",
+    "reason": "auto"
+  },
+  {
+    "piece": "I",
+    "landed_coordinates": [
+      [
+        3,
+        16
+      ],
+      [
+        3,
+        17
+      ],
+      [
+        3,
+        18
+      ],
+      [
+        3,
+        19
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "O"
+    ],
+    "timestamp": "2025-08-24T14:09:10.581917",
+    "reason": "auto"
+  },
+  {
+    "piece": "O",
+    "landed_coordinates": [
+      [
+        6,
+        13
+      ],
+      [
+        7,
+        13
+      ],
+      [
+        6,
+        14
+      ],
+      [
+        7,
+        14
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:09:11.867961",
+    "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        2,
+        17
+      ],
+      [
+        2,
+        18
+      ],
+      [
+        1,
+        18
+      ],
+      [
+        1,
+        19
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 1,
+    "next_pieces_queue": [
+      "L"
+    ],
+    "timestamp": "2025-08-24T14:09:13.895684",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        0,
+        16
+      ],
+      [
+        0,
+        17
+      ],
+      [
+        0,
+        18
+      ],
+      [
+        1,
+        18
+      ]
+    ],
+    "rotation": 2,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "I"
+    ],
+    "timestamp": "2025-08-24T14:09:15.383055",
+    "reason": "auto"
+  },
+  {
+    "piece": "I",
+    "landed_coordinates": [
+      [
+        4,
+        15
+      ],
+      [
+        4,
+        16
+      ],
+      [
+        4,
+        17
+      ],
+      [
+        4,
+        18
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 1,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:09:17.721641",
+    "reason": "auto"
+  },
+  {
+    "piece": "J",
+    "landed_coordinates": [
+      [
+        2,
+        16
+      ],
+      [
+        2,
+        17
+      ],
+      [
+        2,
+        18
+      ],
+      [
+        1,
+        18
+      ]
+    ],
+    "rotation": 1,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "S"
+    ],
+    "timestamp": "2025-08-24T14:09:20.784717",
+    "reason": "auto"
+  },
+  {
+    "piece": "S",
+    "landed_coordinates": [
+      [
+        9,
+        16
+      ],
+      [
+        9,
+        17
+      ],
+      [
+        8,
+        15
+      ],
+      [
+        8,
+        16
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:09:24.235164",
+    "reason": "auto"
+  },
+  {
+    "piece": "I",
+    "landed_coordinates": [
+      [
+        4,
+        19
+      ],
+      [
+        5,
+        19
+      ],
+      [
+        6,
+        19
+      ],
+      [
+        7,
+        19
+      ]
+    ],
+    "rotation": 0,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:19:10.309861",
+    "reason": "auto"
+  },
+  {
+    "piece": "J",
+    "landed_coordinates": [
+      [
+        2,
+        19
+      ],
+      [
+        1,
+        19
+      ],
+      [
+        0,
+        19
+      ],
+      [
+        0,
+        18
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "L"
+    ],
+    "timestamp": "2025-08-24T14:19:17.654234",
+    "reason": "auto"
+  },
+  {
+    "piece": "L",
+    "landed_coordinates": [
+      [
+        1,
+        16
+      ],
+      [
+        1,
+        17
+      ],
+      [
+        1,
+        18
+      ],
+      [
+        2,
+        18
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "Z"
+    ],
+    "timestamp": "2025-08-24T14:19:20.163863",
+    "reason": "auto"
+  },
+  {
+    "piece": "Z",
+    "landed_coordinates": [
+      [
+        5,
+        17
+      ],
+      [
+        6,
+        17
+      ],
+      [
+        6,
+        18
+      ],
+      [
+        7,
+        18
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "J"
+    ],
+    "timestamp": "2025-08-24T14:19:22.288411",
+    "reason": "auto"
+  },
+  {
+    "piece": "J",
+    "landed_coordinates": [
+      [
+        8,
+        15
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        7,
+        17
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "T"
+    ],
+    "timestamp": "2025-08-24T14:19:24.189243",
+    "reason": "auto"
+  },
+  {
+    "piece": "T",
+    "landed_coordinates": [
+      [
+        6,
+        15
+      ],
+      [
+        5,
+        16
+      ],
+      [
+        6,
+        16
+      ],
+      [
+        7,
+        16
+      ]
+    ],
+    "rotation": 3,
+    "lines_cleared": 0,
+    "next_pieces_queue": [
+      "I"
+    ],
+    "timestamp": "2025-08-24T14:19:26.004697",
+    "reason": "auto"
   }
 ]

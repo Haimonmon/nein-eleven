@@ -2,9 +2,9 @@ import pygame
 
 class BitInterfaceScoreBoard:
     """ Renders a grid scoreboard interface """
-    def __init__(self, window, scoreboard_logic, width: int, height: int, position_x: int = 0, position_y: int = 0, border_color: str | set = "blue", border_thickness: int = 1, font_color: str = "white", font_size: int = 30) -> None:
+    def __init__(self, engine, scoreboard_logic, width: int, height: int, position_x: int = 0, position_y: int = 0, border_color: str | set = "blue", border_thickness: int = 1, font_color: str = "white", font_size: int = 30, background_color: str | set = "black") -> None:
         """ Tetris board scoreboard """
-        self.window = window
+        self.engine = engine
 
         self.scoreboard_logic = scoreboard_logic
 
@@ -16,6 +16,7 @@ class BitInterfaceScoreBoard:
 
         self.border_color = border_color
         self.border_thickness = border_thickness
+        self.background_color = background_color
 
         self.font_color = font_color
         self.font_size = font_size
@@ -33,7 +34,7 @@ class BitInterfaceScoreBoard:
         # * Draw board
         pygame.draw.rect(
             screen, 
-            self.window.background_color, 
+            self.background_color, 
             (self.position_x, self.position_y, self.width, self.height)
         )
 

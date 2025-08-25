@@ -1,15 +1,15 @@
-import random
 import os
 import copy
 import json
+import random
 
-from typing import Literal, Dict, List, Tuple, Type
+from typing import Literal, List
 
 from .core_tetromino import BitLogicTetromino
 from .core_next_piece_view import BitLogicNextPiece
-from .ngrams import PatternNGrams
+from ..ngrams import PatternNGrams
 
-from bitEngine.ui import BitInterfaceTetromino
+from bitEngine.ui.tetris_ui import BitInterfaceTetromino
 
 
 class BitLogicGrid:
@@ -37,8 +37,8 @@ class BitLogicGrid:
 
 class BitLogicTetrominoGridSpawner:
     """ Basically just a spawner 🤓☝️"""
-    def __init__(self, window, grid_logic: BitLogicGrid, next_piece_logic: BitLogicNextPiece, tick_speed: int = 500):
-        self.window = window 
+    def __init__(self, engine, grid_logic: BitLogicGrid, next_piece_logic: BitLogicNextPiece, tick_speed: int = 500):
+        self.engine = engine 
 
         self.tick_speed = tick_speed
 
@@ -52,8 +52,8 @@ class BitLogicTetrominoGridSpawner:
         self.tetromino_colors = "green"
         self.tetromino_border_color = None
         self.tetromino_indicator_color = "white"
-        
-        # predictor handles write_pattern and predict
+
+        # * predictor handles write_pattern and predict
         self.predictor = PatternNGrams()
 
         self.spawn_test = True
@@ -70,26 +70,26 @@ class BitLogicTetrominoGridSpawner:
         self.tetromino_border_color = border_color
         self.tetromino_indicator_color = indicator_color
         return
-    
+
 
     def update(self) -> None:
         # * Spawn once only for testing
         if not self.spawned_tetromino or self.spawned_tetromino.landed:
             if self.spawned_tetromino:
-                # Use PatternNGrams' write_pattern instead of local one
+                # * Use PatternNGrams' write_pattern instead of local one
                 landed_coords = self.spawned_tetromino.coordinates
                 piece = self.spawned_tetromino.piece_shape
                 rotation = self.controller.rotation_index
 
                 
-                # count cleared lines
+                # * count cleared lines
                 lines_cleared = 0
                 for y in range(self.grid_logic.rows):
                     if all(self.grid_logic.cell_coordinates[y][x] != 0
                            for x in range(self.grid_logic.columns)):
                         lines_cleared += 1
 
-                # get the next queue from next_piece_logic
+                # * get the next queue from next_piece_logic
                 next_queue = self.next_piece_logic.peek_next()
 
                 self.predictor.write_pattern(
@@ -146,11 +146,9 @@ class BitLogicTetrominoGridSpawner:
         if start_x + created_tetromino.max_x >= self.grid_logic.columns:
             start_x = self.grid_logic.columns - created_tetromino.max_x - 1
 
-        
         # * Change tetromino coordinates base on grid
         tetromino_coordinates = [(x + start_x, y + start_y) for x, y in created_tetromino.coordinates]
        
-        
         # * Position Tetromino on the grid
         for x, y in tetromino_coordinates:
             self.grid_logic.cell_coordinates[y][x] = 1
@@ -158,7 +156,7 @@ class BitLogicTetrominoGridSpawner:
         created_tetromino.coordinates = tetromino_coordinates
 
         self.spawned_tetromino = created_tetromino
-        
+
 
     def format_board(self, board):
         return ["[" + ",".join(str(c) for c in row) + "]" for row in board]
@@ -197,7 +195,7 @@ class BitLogicTetrominoGridSpawner:
             json.dump(existing, f, indent=2)
 
         return pattern_data
-    
+
 
     def create(self, piece_shape: Literal["0", "I"]) -> BitLogicTetromino:
         """ Creates the tetromino peice coordinates or its piece shape """
@@ -207,20 +205,20 @@ class BitLogicTetrominoGridSpawner:
         created_logic_tetromino: BitLogicTetromino = self.tetromino_logic(self.grid_logic, piece_shape, coordinates, self.tick_speed)
 
         # * ADDS TO THE WINDOW SURFACE
-        self.window.add_object(created_logic_tetromino)
+        self.engine.add_object(created_logic_tetromino)
         tetromino_interface = self.tetromino_interface(created_logic_tetromino, self.tetromino_colors)
 
         tetromino_interface.border_color = self.tetromino_border_color
         tetromino_interface.indicator_color = self.tetromino_indicator_color
 
-        self.window.add_object(tetromino_interface)
+        self.engine.add_object(tetromino_interface)
 
         return created_logic_tetromino
 
 
 class BitLogicLineCleaner:
-    def __init__(self, window, grid_logic, num_clearing):
-        self.window = window
+    def __init__(self, engine, grid_logic, num_clearing):
+        self.engine = engine
 
         self.grid_logic = grid_logic
 
@@ -232,8 +230,7 @@ class BitLogicLineCleaner:
 
 
     def update(self) -> None:
-        self.tetrominoes = self.window.get_objects("BitLogicTetromino")
-
+        self.tetrominoes = self.engine.get_objects("BitLogicTetromino")
         self.check_clearing()
 
 

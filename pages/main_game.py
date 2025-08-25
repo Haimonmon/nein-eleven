@@ -1,11 +1,10 @@
-import bitEngine
 import pygame
+import bitEngine
 
 from typing import Literal
 
 class MainGame:
     """ Here lies the fun and gameplay """
-
     def __init__(self, main, picked_gamemode: Literal["SinglePlayer", "PlayerVsPlayer", "PlayerVsAi"] = None):
         self.main = main
         self.engine: bitEngine.Bit = main.engine
@@ -90,13 +89,13 @@ class MainGame:
             center=(surface.get_width() // 2, surface.get_height() // 2 - 100))
         surface.blit(pause_text, pause_rect)
 
-   
+
         option_font = pygame.font.SysFont("SF Pixelate", 40, bold=True)
         rendered_options = []
         total_width = 0
         spacing = 80  
 
-      
+
         for i, option in enumerate(self.pause_options):
             is_selected = (i == self.pause_selected)
 
@@ -114,11 +113,11 @@ class MainGame:
             if i < len(self.pause_options) - 1:
                 total_width += spacing
 
-      
+
         start_x = pause_rect.centerx - total_width // 2
         y = pause_rect.bottom + 80
 
-      
+
         for i, (text_surface, color, is_selected) in enumerate(rendered_options):
             text_rect = text_surface.get_rect(
                 midleft=(start_x + 20, y))  # leave padding
@@ -129,7 +128,6 @@ class MainGame:
                 text_rect.height + 20
             )
 
-          
             border_color = (255, 215, 0) if is_selected else (255, 255, 255)
             pygame.draw.rect(surface, border_color, button_rect, 3)
 
